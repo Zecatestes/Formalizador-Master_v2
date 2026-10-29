@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const fileEnv = loadEnv(mode, process.cwd(), '');
   const rawPort = process.env.PORT || fileEnv.PORT || '5173';
   const port = Number(rawPort);
-  const basePath = process.env.BASE_PATH || fileEnv.BASE_PATH || '/';
+  const basePath = '/Formalizador-Master_v2/';
 
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error(`Invalid PORT value: "${rawPort}"`);
