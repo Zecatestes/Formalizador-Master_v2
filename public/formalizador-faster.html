@@ -1,0 +1,3320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Formalizações — ODEEN</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=4sPY22BVgWaf6ubyuii76FPczO6aqqS3KOzwKNiAfXxqcWzsbUTgmE3maIbc-9m36_lFMTXPzxeXwF-4fPp_M4Nf25uKAHeNi33h8EXMv4sf_549WFpkH2hTdnzOlSqOFobyVi3XvmkXasa7Uc7ZGKSrVL2k2EC8chqXxD9Ij-kY4MzcekCxaO0pdEVJ8DE4J-QSlmn5WZcjBHxrHIpbwO8KUS2igsMdeUBGZtgcnmrQxa2rgIWEndkQGZ_WJh8-4lFvH-rPkrOMmKJ3ul6qU0wfptwwh3Kvp-_kSmY3TDEy8X5y5UxsWH43cJNMNRT1LSFqK7OMihyifE4-0-Ju34onQiDP61CY4xCXMHZPIRY" charset="UTF-8"></script><style>
+        :root {
+            --primary: #111b1e;
+            --primary-light: #1c2b2d;
+            --accent: #3b7a57;
+            --accent-hover: #2d6546;
+            --success: #15803d;
+            --danger: #dc2626;
+            --warning: #b45309;
+            --background: #f4f6f8;
+            --card: #ffffff;
+            --border: #d5dde2;
+            --text: #1a2228;
+            --muted: #5f6c73;
+            --input-bg: #ffffff;
+            --shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+            --radius: 12px;
+        }
+
+        [data-theme="dark"] {
+            --primary: #0d1419;
+            --primary-light: #151f25;
+            --accent: #4e9f6d;
+            --accent-hover: #63b680;
+            --success: #4ade80;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --background: #0f1418;
+            --card: #151b22;
+            --border: #2b3840;
+            --text: #edf2f3;
+            --muted: #9aa9ad;
+            --input-bg: #11181d;
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 24px 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-content {
+            max-width: 1500px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-copy {
+            min-width: 0;
+        }
+
+        .theme-toggle {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 13px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .theme-toggle:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid rgba(92, 153, 119, 0.45);
+            outline-offset: 2px;
+        }
+
+        .header-content h1 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: 0.3px;
+        }
+
+        .header-content p {
+            margin: 5px 0 0;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 24px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            margin: 0 0 4px;
+            font-size: 19px;
+            color: var(--text);
+        }
+
+        .section-description {
+            margin: 0 0 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .field {
+            margin-bottom: 4px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        label .required {
+            color: var(--danger);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 12px;
+            background: var(--input-bg);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(92, 153, 119, 0.16);
+        }
+
+        textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        .conditional {
+            display: none;
+        }
+
+        .conditional.visible {
+            display: block;
+        }
+
+        .subsection {
+            margin-top: 20px;
+            padding: 17px;
+            border: 1px solid #dbeafe;
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            background: #f8fbff;
+        }
+
+        .subsection h3 {
+            margin: 0 0 14px;
+            font-size: 15px;
+            color: #1e3a8a;
+        }
+
+        .info-box {
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .info-box.warning {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+        }
+
+        .info-box.success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .validation {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            font-size: 13px;
+        }
+
+        .validation.visible {
+            display: block;
+        }
+
+        .validation ul {
+            margin: 8px 0 0;
+            padding-left: 20px;
+        }
+
+        .preview-sticky {
+            position: sticky;
+            top: 18px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .preview-header h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .status-badge.ready {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        #preview {
+            width: 100%;
+            min-height: 520px;
+            padding: 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.65;
+            resize: vertical;
+        }
+
+        .preview-placeholder {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #166534;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 999;
+            padding: 13px 17px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: white;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            transition: 0.25s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .field-error {
+            border-color: var(--danger) !important;
+            background: #fffafa;
+        }
+
+        .tabs {
+            max-width: 1500px;
+            margin: 18px auto 0;
+            padding: 0 20px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: #e2e8f0;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .tab-button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .standard-preview {
+            white-space: pre-wrap;
+            min-height: 360px;
+            width: 100%;
+            padding: 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .standard-note {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .help-text {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        [data-theme="dark"] header {
+            background: linear-gradient(135deg, #020617, #1e293b);
+        }
+
+        [data-theme="dark"] .header-content p {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .subsection {
+            border-color: #1e40af;
+            background: #172554;
+        }
+
+        [data-theme="dark"] .subsection h3 {
+            color: #bfdbfe;
+        }
+
+        [data-theme="dark"] .info-box.warning {
+            background: #451a03;
+            border-color: #92400e;
+            color: #fed7aa;
+        }
+
+        [data-theme="dark"] .info-box.success {
+            background: #052e16;
+            border-color: #166534;
+            color: #bbf7d0;
+        }
+
+        [data-theme="dark"] .validation {
+            background: #450a0a;
+            border-color: #991b1b;
+            color: #fecaca;
+        }
+
+        [data-theme="dark"] .status-badge {
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        [data-theme="dark"] .status-badge.ready {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+
+        [data-theme="dark"] .status-badge.error {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        [data-theme="dark"] #preview,
+        [data-theme="dark"] .standard-preview {
+            border-color: var(--border);
+            background: #0b1220;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .preview-placeholder {
+            color: #64748b;
+        }
+
+        [data-theme="dark"] .btn-secondary,
+        [data-theme="dark"] .tab-button {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .btn-secondary:hover,
+        [data-theme="dark"] .tab-button:hover {
+            background: #475569;
+        }
+
+        [data-theme="dark"] .btn-danger {
+            background: #450a0a;
+            color: #fecaca;
+        }
+
+        [data-theme="dark"] .btn-danger:hover {
+            background: #7f1d1d;
+        }
+
+        [data-theme="dark"] .standard-note {
+            background: #172554;
+            border-color: #1d4ed8;
+            color: #bfdbfe;
+        }
+
+        [data-theme="dark"] .field-error {
+            background: #2a1015;
+        }
+
+        [data-theme="dark"] .toast {
+            background: #020617;
+            border: 1px solid #334155;
+        }
+
+        @media (max-width: 1050px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-sticky {
+                position: static;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .grid,
+            .grid-3,
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .layout {
+                margin-top: 14px;
+                padding: 0 10px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .header-content h1 {
+                font-size: 20px;
+            }
+
+            .header-content {
+                align-items: flex-start;
+            }
+
+            .theme-toggle span:last-child {
+                display: none;
+            }
+
+            #preview {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="header-copy">
+            <h1>GERADOR DE FORMALIZAÇÕES — ODEEN</h1>
+            <p>Formalização automática de ocorrências de recuperação de veículos</p>
+        </div>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Ativar modo escuro" aria-pressed="false">
+            <span aria-hidden="true">☾</span>
+            <span>Modo escuro</span>
+        </button>
+    </div>
+</header>
+
+<div class="tabs">
+    <button type="button" class="tab-button active" data-tab="recuperacaoTab">GERADOR DE RECUPERAÇÃO</button>
+    <button type="button" class="tab-button" data-tab="padroesTab">FORMALIZAÇÕES PADRÕES</button>
+</div>
+
+<div id="recuperacaoTab" class="tab-content active">
+<main class="layout">
+
+    <section>
+
+        <!-- ETAPA 1 -->
+        <div class="card">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-title">Dados da recuperação</div>
+            </div>
+
+            <h2 class="section-title">DADOS DA RECUPERAÇÃO</h2>
+            <p class="section-description">
+                Informe os dados básicos da ocorrência e localização do ativo.
+            </p>
+
+            <div class="grid">
+                <div class="field">
+                    <label for="tipoAtivo">Tipo de ativo <span class="required">*</span></label>
+                    <select id="tipoAtivo">
+                        <option value="">Selecione...</option>
+                        <option value="veículo">Veículo</option>
+                        <option value="motocicleta">Motocicleta</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="placa">Placa <span class="required">*</span></label>
+                    <input id="placa" type="text" autocomplete="off">
+                </div>
+
+                <div class="field">
+                    <label for="tipoOcorrencia">Tipo de ocorrência <span class="required">*</span></label>
+                    <select id="tipoOcorrencia">
+                        <option value="">Selecione...</option>
+                        <option value="ROUBO">ROUBO</option>
+                        <option value="FURTO">FURTO</option>
+                        <option value="ROUBO/FURTO">ROUBO/FURTO</option>
+                        <option value="APROPRIAÇÃO INDÉBITA">APROPRIAÇÃO INDÉBITA</option>
+                        <option value="SEM QUEIXA/REGISTRO">SEM QUEIXA/REGISTRO</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="registro190">Possui registro 190? <span class="required">*</span></label>
+                    <select id="registro190">
+                        <option value="">Selecione...</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="possuiBo">Possui BO? <span class="required">*</span></label>
+                    <select id="possuiBo">
+                        <option value="">Selecione...</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                    </select>
+                </div>
+
+                <div id="numeroBoWrapper" class="field conditional">
+                    <label for="numeroBo">Número do BO <span class="required">*</span></label>
+                    <input id="numeroBo" type="text" placeholder="Informe o número do BO">
+                </div>
+
+                <div class="field">
+                    <label for="possuiRastreador">Possui rastreador? <span class="required">*</span></label>
+                    <select id="possuiRastreador">
+                        <option value="">Selecione...</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                    </select>
+                </div>
+
+                <div class="field full">
+                    <label for="localizacao">Local da recuperação <span class="required">*</span></label>
+                    <textarea id="localizacao" placeholder="Informe o endereço ou local da recuperação"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETAPA 2 -->
+        <div class="card">
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Adulteração</div>
+            </div>
+
+            <div class="grid">
+                <div class="field">
+                    <label for="adulteracao">O veículo possuía placa adulterada? <span class="required">*</span></label>
+                    <select id="adulteracao">
+                        <option value="">Selecione...</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="adulteracaoFields" class="subsection conditional">
+                <h3>Dados da adulteração</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label for="placaAdulterada">Placa ostentada/adulterada <span class="required">*</span></label>
+                        <input id="placaAdulterada" type="text">
+                    </div>
+
+                    <div class="field">
+                        <label for="placaVerdadeira">Placa verdadeira <span class="required">*</span></label>
+                        <input id="placaVerdadeira" type="text">
+                    </div>
+
+                    <div class="field">
+                        <label for="meioIdentificacao">Meio de identificação da placa verdadeira <span class="required">*</span></label>
+                        <select id="meioIdentificacao">
+                            <option value="">Selecione...</option>
+                            <option value="Chassi">Chassi</option>
+                            <option value="Motor">Motor</option>
+                            <option value="Chassi e motor">Chassi e motor</option>
+                            <option value="Meios metalográficos">Meios metalográficos</option>
+                            <option value="Scanner">Scanner</option>
+                            <option value="Meios periciais">Meios periciais</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <div id="outroMeioWrapper" class="field conditional">
+                        <label for="outroMeio">Informe o meio utilizado <span class="required">*</span></label>
+                        <input id="outroMeio" type="text">
+                    </div>
+
+                    <div id="chassiWrapper" class="field conditional">
+                        <label for="chassi">Chassi <span class="required">*</span></label>
+                        <input id="chassi" type="text">
+                    </div>
+
+                    <div id="motorWrapper" class="field conditional">
+                        <label for="motor">Motor <span class="required">*</span></label>
+                        <input id="motor" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETAPA 3 -->
+        <div class="card">
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Resultado da recuperação</div>
+            </div>
+
+            <div class="grid">
+                <div class="field">
+                    <label for="resultado">Qual foi o resultado da recuperação? <span class="required">*</span></label>
+                    <select id="resultado">
+                        <option value="">Selecione...</option>
+                        <option value="LIBERADO">LIBERADO</option>
+                        <option value="APREENDIDO">APREENDIDO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- LIBERAÇÃO -->
+            <div id="liberacaoFields" class="conditional">
+
+                <div class="subsection">
+                    <h3>Dados da liberação</h3>
+
+                    <div class="grid">
+                        <div class="field">
+                            <label for="liberadoNoLocal">O ativo foi liberado no local da recuperação? <span class="required">*</span></label>
+                            <select id="liberadoNoLocal">
+                                <option value="">Selecione...</option>
+                                <option value="SIM">SIM</option>
+                                <option value="NÃO">NÃO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- LIBERADO NO LOCAL -->
+                    <div id="liberacaoLocalFields" class="conditional">
+                        <div class="subsection">
+                            <h3>Liberação no local</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="documentoLocal">Documento da ocorrência <span class="required">*</span></label>
+                                    <select id="documentoLocal">
+                                        <option value="">Selecione...</option>
+                                        <option value="NOC">NOC</option>
+                                        <option value="Talão Token">Talão Token</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="BO Auto de Entrega">BO Auto de Entrega</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="numeroDocumentoLocal">Número do Documento da Ocorrência <span class="required">*</span></label>
+                                    <input id="numeroDocumentoLocal" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LIBERADO FORA DO LOCAL -->
+                    <div id="liberacaoForaFields" class="conditional">
+                        <div class="subsection">
+                            <h3>Liberação fora do local</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="documentoFora">Documento da ocorrência <span class="required">*</span></label>
+                                    <select id="documentoFora">
+                                        <option value="">Selecione...</option>
+                                        <option value="NOC">NOC</option>
+                                        <option value="Talão Token">Talão Token</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="BO Auto de Entrega">BO Auto de Entrega</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="numeroDocumentoFora">Número do Documento da Ocorrência <span class="required">*</span></label>
+                                    <input id="numeroDocumentoFora" type="text">
+                                </div>
+                            </div>
+
+                            <div class="subsection">
+                                <h3>Delegacia onde foi liberado</h3>
+
+                                <div class="grid">
+                                    <div class="field">
+                                        <label for="delegaciaLiberacao">Nome da delegacia <span class="required">*</span></label>
+                                        <input id="delegaciaLiberacao" type="text">
+                                    </div>
+
+                                    <div class="field">
+                                        <label for="enderecoDelegaciaLiberacao">Endereço <span class="required">*</span></label>
+                                        <input id="enderecoDelegaciaLiberacao" type="text">
+                                    </div>
+
+                                    <div class="field">
+                                        <label for="telefoneDelegaciaLiberacao">Telefone <span class="required">*</span></label>
+                                        <input id="telefoneDelegaciaLiberacao" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECEBEDOR -->
+                    <div id="recebedorFields" class="subsection">
+                        <h3>Dados de quem recebeu o ativo</h3>
+
+                        <div class="grid">
+                            <div class="field">
+                                <label for="quemRecebeu">Quem recebeu o ativo? <span class="required">*</span></label>
+                                <select id="quemRecebeu">
+                                    <option value="">Selecione...</option>
+                                    <option value="Proprietário">Proprietário</option>
+                                    <option value="Locatário">Locatário</option>
+                                    <option value="Parente do proprietário">Parente do proprietário</option>
+                                    <option value="Representante">Representante</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="sexoRecebedor">Sexo do proprietário/recebedor <span class="required">*</span></label>
+                                <select id="sexoRecebedor">
+                                    <option value="">Selecione...</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="nomeRecebedor">Nome completo da pessoa que recebeu o ativo <span class="required">*</span></label>
+                                <input id="nomeRecebedor" type="text">
+                            </div>
+
+                            <div class="field">
+                                <label for="cpfRecebedor">CPF <span class="required">*</span></label>
+                                <input id="cpfRecebedor" type="text">
+                            </div>
+                        </div>
+
+                        <!-- PARENTE -->
+                        <div id="parentescoFields" class="subsection conditional">
+                            <h3>Dados do proprietário e parentesco</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="parentesco">Grau de parentesco <span class="required">*</span></label>
+                                    <select id="parentesco">
+                                        <option value="">Selecione...</option>
+                                        <option value="Irmão">Irmão</option>
+                                        <option value="Irmã">Irmã</option>
+                                        <option value="Pai">Pai</option>
+                                        <option value="Mãe">Mãe</option>
+                                        <option value="Primo">Primo</option>
+                                        <option value="Prima">Prima</option>
+                                        <option value="Tio">Tio</option>
+                                        <option value="Tia">Tia</option>
+                                        <option value="Esposa">Esposa</option>
+                                        <option value="Marido">Marido</option>
+                                        <option value="Outro">Outro</option>
+                                    </select>
+                                </div>
+
+                                <div id="outroParentescoWrapper" class="field conditional">
+                                    <label for="outroParentesco">Informe o parentesco <span class="required">*</span></label>
+                                    <input id="outroParentesco" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="nomeProprietario">Nome do proprietário <span class="required">*</span></label>
+                                    <input id="nomeProprietario" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="cpfProprietario">CPF do proprietário <span class="required">*</span></label>
+                                    <input id="cpfProprietario" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APREENSÃO -->
+            <div id="apreensaoFields" class="conditional">
+
+                <div class="subsection">
+                    <h3>Dados da apreensão</h3>
+
+                    <div class="grid">
+                        <div class="field">
+                            <label for="destinoApreensao">Para onde o ativo foi encaminhado? <span class="required">*</span></label>
+                            <select id="destinoApreensao">
+                                <option value="">Selecione...</option>
+                                <option value="Delegacia">Delegacia</option>
+                                <option value="Pátio">Pátio</option>
+                                <option value="Delegacia e posteriormente outro local">Delegacia e posteriormente outro local</option>
+                                <option value="Não foi encaminhado">Não foi encaminhado</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="numeroBoApreensao">Número do BO <span class="required">*</span></label>
+                            <input id="numeroBoApreensao" type="text">
+                        </div>
+                    </div>
+
+                    <!-- APREENSÃO DELEGACIA -->
+                    <div id="apreensaoDelegaciaFields" class="conditional">
+                        <div class="subsection">
+                            <h3>Delegacia de apreensão</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="nomeDelegaciaApreensao">Nome <span class="required">*</span></label>
+                                    <input id="nomeDelegaciaApreensao" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="enderecoDelegaciaApreensao">Endereço <span class="required">*</span></label>
+                                    <input id="enderecoDelegaciaApreensao" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="telefoneDelegaciaApreensao">Telefone <span class="required">*</span></label>
+                                    <input id="telefoneDelegaciaApreensao" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>Documento que representa a apreensão</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="documentoApreensaoDelegacia">Documento <span class="required">*</span></label>
+                                    <select id="documentoApreensaoDelegacia">
+                                        <option value="">Selecione...</option>
+                                        <option value="BO de Apreensão">BO de Apreensão</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="MANUAL">MANUAL</option>
+                                    </select>
+                                </div>
+
+                                <div id="manualDelegaciaWrapper" class="field conditional">
+                                    <label for="tipoDocumentoManualDelegacia">Tipo de documento utilizado <span class="required">*</span></label>
+                                    <input id="tipoDocumentoManualDelegacia" type="text">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- APREENSÃO PÁTIO -->
+                    <div id="apreensaoPatioFields" class="conditional">
+                        <div class="subsection">
+                            <h3>Dados do pátio</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="nomePatio">Nome do pátio <span class="required">*</span></label>
+                                    <input id="nomePatio" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="enderecoPatio">Endereço <span class="required">*</span></label>
+                                    <input id="enderecoPatio" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="telefonePatio">Telefone <span class="required">*</span></label>
+                                    <input id="telefonePatio" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>Documento da apreensão</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="documentoApreensaoPatio">Documento <span class="required">*</span></label>
+                                    <select id="documentoApreensaoPatio">
+                                        <option value="">Selecione...</option>
+                                        <option value="BO de Apreensão">BO de Apreensão</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="MANUAL">MANUAL</option>
+                                    </select>
+                                </div>
+
+                                <div id="manualPatioWrapper" class="field conditional">
+                                    <label for="tipoDocumentoManualPatio">Tipo de documento utilizado <span class="required">*</span></label>
+                                    <input id="tipoDocumentoManualPatio" type="text">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DELEGACIA + OUTRO LOCAL -->
+                    <div id="apreensaoDuplaFields" class="conditional">
+
+                        <div class="subsection">
+                            <h3>Delegacia de apresentação</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="nomeDelegaciaApresentacao">Nome <span class="required">*</span></label>
+                                    <input id="nomeDelegaciaApresentacao" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="enderecoDelegaciaApresentacao">Endereço <span class="required">*</span></label>
+                                    <input id="enderecoDelegaciaApresentacao" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="telefoneDelegaciaApresentacao">Telefone <span class="required">*</span></label>
+                                    <input id="telefoneDelegaciaApresentacao" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>Local definitivo da apreensão</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="tipoLocalDefinitivo">Tipo de local <span class="required">*</span></label>
+                                    <select id="tipoLocalDefinitivo">
+                                        <option value="">Selecione...</option>
+                                        <option value="Delegacia">Delegacia</option>
+                                        <option value="Pátio">Pátio</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="nomeLocalDefinitivo">Nome do local <span class="required">*</span></label>
+                                    <input id="nomeLocalDefinitivo" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="enderecoLocalDefinitivo">Endereço <span class="required">*</span></label>
+                                    <input id="enderecoLocalDefinitivo" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="telefoneLocalDefinitivo">Telefone <span class="required">*</span></label>
+                                    <input id="telefoneLocalDefinitivo" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="documentoDuplo">Documento <span class="required">*</span></label>
+                                    <select id="documentoDuplo">
+                                        <option value="">Selecione...</option>
+                                        <option value="BO de Apreensão">BO de Apreensão</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="MANUAL">MANUAL</option>
+                                    </select>
+                                </div>
+
+                                <div id="manualDuploWrapper" class="field conditional">
+                                    <label for="tipoDocumentoManualDuplo">Tipo de documento utilizado <span class="required">*</span></label>
+                                    <input id="tipoDocumentoManualDuplo" type="text">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NÃO ENCAMINHADO -->
+                    <div id="naoEncaminhadoFields" class="conditional">
+                        <div class="info-box warning">
+                            O fluxo "Não foi encaminhado" exige informações mínimas sobre o encerramento. Preencha os dados disponíveis antes de gerar a formalização.
+                        </div>
+
+                        <div class="subsection">
+                            <h3>Documento da ocorrência</h3>
+
+                            <div class="grid">
+                                <div class="field">
+                                    <label for="documentoNaoEncaminhado">Documento <span class="required">*</span></label>
+                                    <select id="documentoNaoEncaminhado">
+                                        <option value="">Selecione...</option>
+                                        <option value="BO de Apreensão">BO de Apreensão</option>
+                                        <option value="Requisição IC">Requisição IC</option>
+                                        <option value="MANUAL">MANUAL</option>
+                                    </select>
+                                </div>
+
+                                <div id="manualNaoEncaminhadoWrapper" class="field conditional">
+                                    <label for="tipoDocumentoManualNaoEncaminhado">Tipo de documento <span class="required">*</span></label>
+                                    <input id="tipoDocumentoManualNaoEncaminhado" type="text">
+                                </div>
+
+                                <div class="field">
+                                    <label for="numeroDocumentoNaoEncaminhado">Número <span class="required">*</span></label>
+                                    <input id="numeroDocumentoNaoEncaminhado" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ETAPA 5 -->
+        <div class="card">
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-title">Guincho</div>
+            </div>
+
+            <div class="info-box warning">
+                O preenchimento de guincho é especialmente aplicável aos fluxos sem queixa/registro. Os dados complementares permanecem opcionais.
+            </div>
+
+            <div class="grid">
+                <div class="field">
+                    <label for="houveGuincho">Houve acionamento de guincho?</label>
+                    <select id="houveGuincho">
+                        <option value="">Não informado</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="guinchoFields" class="subsection conditional">
+                <h3>Dados do guincho</h3>
+
+                <div class="grid">
+                    <div class="field">
+                        <label for="solicitanteGuincho">Quem solicitou o guincho?</label>
+                        <select id="solicitanteGuincho">
+                            <option value="">Selecione...</option>
+                            <option value="Nossa empresa">Nossa empresa</option>
+                            <option value="Matriz/empresa solicitante">Matriz/empresa solicitante</option>
+                            <option value="Credenciado">Credenciado</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="numeroAssistencia">Número da assistência</label>
+                        <input id="numeroAssistencia" type="text">
+                    </div>
+
+                    <div class="field">
+                        <label for="motoristaGuincho">Motorista</label>
+                        <input id="motoristaGuincho" type="text">
+                    </div>
+
+                    <div class="field">
+                        <label for="empresaGuincho">Empresa</label>
+                        <input id="empresaGuincho" type="text">
+                    </div>
+
+                    <div class="field full">
+                        <label for="destinoGuincho">Destino do veículo</label>
+                        <input id="destinoGuincho" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VALIDAÇÃO -->
+        <div id="validation" class="validation"></div>
+
+    </section>
+
+    <!-- PREVIEW -->
+    <aside class="preview-sticky">
+        <div class="card">
+            <div class="preview-header">
+                <h2>FORMALIZAÇÃO GERADA</h2>
+                <span id="statusBadge" class="status-badge">Aguardando dados</span>
+            </div>
+
+            <textarea
+                id="preview"
+                readonly
+                placeholder="A formalização será construída automaticamente conforme o preenchimento do formulário."
+            ></textarea>
+
+            <div class="actions">
+                <button type="button" class="btn-success" id="copyButton">
+                    COPIAR FORMALIZAÇÃO
+                </button>
+
+                <button type="button" class="btn-danger" id="clearButton">
+                    LIMPAR FORMULÁRIO
+                </button>
+            </div>
+
+            <button
+                type="button"
+                class="btn-primary"
+                id="generateButton"
+                style="width:100%; margin-top:10px;"
+            >
+                VALIDAR E GERAR FORMALIZAÇÃO
+            </button>
+        </div>
+    </aside>
+
+</main>
+</div>
+
+<div id="padroesTab" class="tab-content">
+    <main class="layout">
+        <section>
+            <div class="card">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Formalização padrão</div>
+                </div>
+                <h2 class="section-title">FORMALIZAÇÕES PADRÕES</h2>
+                <p class="section-description">Selecione o modelo e preencha somente os campos correspondentes.</p>
+                <div class="field">
+                    <label for="padraoTipo">Tipo de formalização <span class="required">*</span></label>
+                    <select id="padraoTipo">
+                        <option value="">Selecione...</option>
+                        <option value="SS">FECHAMENTO PADRÃO COM SS</option>
+                        <option value="RV">BASE DE PERDA</option>
+                        <option value="GUINCHO_LM">FORMALIZAÇÃO RECOLHIDO COM GUINCHO (LM,MOTTU,ETC)</option>
+                        <option value="FECHAMENTO_BASE_LOCALIZA">PADRÃO FECHAMENTO — VEÍCULO ENCONTRADO EM GUINCHO/OFICINA CREDENCIADA LOCALIZA</option>
+                        <option value="AVERIGUACAO_OK">AVERIGUAÇÃO — EM SEGURANÇA OK</option>
+                        <option value="VEICULO_ATIVIDADE_CRIMINOSA">VEÍCULO UTILIZADO EM ATIVIDADE CRIMINOSA</option>
+                        <option value="PRONTA_RESPOSTA_SEM_SUCESSO">PADRÃO PRONTA RESPOSTA (AVERIGUAÇÃO) SEM SUCESSO NO VISUAL</option>
+                        <option value="PRONTA_RESPOSTA_RASTREADOR">PADRÃO PRONTA RESPOSTA (RASTREADOR LOCALIZADO) — SOMENTE O RASTREADOR LOCALIZADO</option>
+                        <option value="INICIO_RECUPERACAO_HDI">PADRÃO INÍCIO RECUPERAÇÃO HDI</option>
+                        <option value="AGENCIA">FORMALIZAÇÃO ENTREGUE EM AGÊNCIA</option>
+                    </select>
+                </div>
+                <div id="padraoCampos"></div>
+            </div>
+            <div id="padraoValidation" class="validation"></div>
+        </section>
+
+        <aside class="preview-sticky">
+            <div class="card">
+                <div class="preview-header">
+                    <h2>FORMALIZAÇÃO PADRÃO GERADA</h2>
+                    <span id="padraoStatus" class="status-badge">Aguardando dados</span>
+                </div>
+                <textarea id="padraoPreview" class="standard-preview" placeholder="A formalização será construída conforme o modelo selecionado."></textarea>
+                <div class="actions">
+                    <button type="button" class="btn-success" id="padraoCopyButton">COPIAR FORMALIZAÇÃO</button>
+                    <button type="button" class="btn-danger" id="padraoClearButton">LIMPAR</button>
+                </div>
+                <button type="button" class="btn-primary" id="padraoGenerateButton" style="width:100%; margin-top:10px;">VALIDAR E GERAR FORMALIZAÇÃO</button>
+            </div>
+        </aside>
+    </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+
+    const form = {
+        tipoAtivo: $("tipoAtivo"),
+        placa: $("placa"),
+        tipoOcorrencia: $("tipoOcorrencia"),
+        registro190: $("registro190"),
+        possuiBo: $("possuiBo"),
+        numeroBo: $("numeroBo"),
+        possuiRastreador: $("possuiRastreador"),
+        localizacao: $("localizacao"),
+
+        adulteracao: $("adulteracao"),
+        placaAdulterada: $("placaAdulterada"),
+        placaVerdadeira: $("placaVerdadeira"),
+        meioIdentificacao: $("meioIdentificacao"),
+        outroMeio: $("outroMeio"),
+        chassi: $("chassi"),
+        motor: $("motor"),
+
+        resultado: $("resultado"),
+
+        liberadoNoLocal: $("liberadoNoLocal"),
+        documentoLocal: $("documentoLocal"),
+        numeroDocumentoLocal: $("numeroDocumentoLocal"),
+
+        documentoFora: $("documentoFora"),
+        numeroDocumentoFora: $("numeroDocumentoFora"),
+        delegaciaLiberacao: $("delegaciaLiberacao"),
+        enderecoDelegaciaLiberacao: $("enderecoDelegaciaLiberacao"),
+        telefoneDelegaciaLiberacao: $("telefoneDelegaciaLiberacao"),
+
+        quemRecebeu: $("quemRecebeu"),
+        sexoRecebedor: $("sexoRecebedor"),
+        nomeRecebedor: $("nomeRecebedor"),
+        cpfRecebedor: $("cpfRecebedor"),
+
+        parentesco: $("parentesco"),
+        outroParentesco: $("outroParentesco"),
+        nomeProprietario: $("nomeProprietario"),
+        cpfProprietario: $("cpfProprietario"),
+
+        destinoApreensao: $("destinoApreensao"),
+        numeroBoApreensao: $("numeroBoApreensao"),
+
+        nomeDelegaciaApreensao: $("nomeDelegaciaApreensao"),
+        enderecoDelegaciaApreensao: $("enderecoDelegaciaApreensao"),
+        telefoneDelegaciaApreensao: $("telefoneDelegaciaApreensao"),
+        documentoApreensaoDelegacia: $("documentoApreensaoDelegacia"),
+        tipoDocumentoManualDelegacia: $("tipoDocumentoManualDelegacia"),
+
+        nomePatio: $("nomePatio"),
+        enderecoPatio: $("enderecoPatio"),
+        telefonePatio: $("telefonePatio"),
+        documentoApreensaoPatio: $("documentoApreensaoPatio"),
+        tipoDocumentoManualPatio: $("tipoDocumentoManualPatio"),
+
+        nomeDelegaciaApresentacao: $("nomeDelegaciaApresentacao"),
+        enderecoDelegaciaApresentacao: $("enderecoDelegaciaApresentacao"),
+        telefoneDelegaciaApresentacao: $("telefoneDelegaciaApresentacao"),
+
+        tipoLocalDefinitivo: $("tipoLocalDefinitivo"),
+        nomeLocalDefinitivo: $("nomeLocalDefinitivo"),
+        enderecoLocalDefinitivo: $("enderecoLocalDefinitivo"),
+        telefoneLocalDefinitivo: $("telefoneLocalDefinitivo"),
+        documentoDuplo: $("documentoDuplo"),
+        tipoDocumentoManualDuplo: $("tipoDocumentoManualDuplo"),
+
+        documentoNaoEncaminhado: $("documentoNaoEncaminhado"),
+        tipoDocumentoManualNaoEncaminhado: $("tipoDocumentoManualNaoEncaminhado"),
+        numeroDocumentoNaoEncaminhado: $("numeroDocumentoNaoEncaminhado"),
+
+        houveGuincho: $("houveGuincho"),
+        solicitanteGuincho: $("solicitanteGuincho"),
+        numeroAssistencia: $("numeroAssistencia"),
+        motoristaGuincho: $("motoristaGuincho"),
+        empresaGuincho: $("empresaGuincho"),
+        destinoGuincho: $("destinoGuincho")
+    };
+
+    const sections = {
+        adulteracaoFields: $("adulteracaoFields"),
+        outroMeioWrapper: $("outroMeioWrapper"),
+        chassiWrapper: $("chassiWrapper"),
+        motorWrapper: $("motorWrapper"),
+
+        liberacaoFields: $("liberacaoFields"),
+        apreensaoFields: $("apreensaoFields"),
+
+        liberacaoLocalFields: $("liberacaoLocalFields"),
+        liberacaoForaFields: $("liberacaoForaFields"),
+        recebedorFields: $("recebedorFields"),
+        parentescoFields: $("parentescoFields"),
+        outroParentescoWrapper: $("outroParentescoWrapper"),
+
+        apreensaoDelegaciaFields: $("apreensaoDelegaciaFields"),
+        apreensaoPatioFields: $("apreensaoPatioFields"),
+        apreensaoDuplaFields: $("apreensaoDuplaFields"),
+        naoEncaminhadoFields: $("naoEncaminhadoFields"),
+
+        manualDelegaciaWrapper: $("manualDelegaciaWrapper"),
+        manualPatioWrapper: $("manualPatioWrapper"),
+        manualDuploWrapper: $("manualDuploWrapper"),
+        manualNaoEncaminhadoWrapper: $("manualNaoEncaminhadoWrapper"),
+
+        guinchoFields: $("guinchoFields"),
+        numeroBoWrapper: $("numeroBoWrapper")
+    };
+
+    const preview = $("preview");
+    const validation = $("validation");
+    const statusBadge = $("statusBadge");
+    const toast = $("toast");
+    const themeToggle = $("themeToggle");
+
+    function applyTheme(isDark) {
+        document.documentElement.dataset.theme = isDark ? "dark" : "light";
+        themeToggle.setAttribute("aria-pressed", String(isDark));
+        themeToggle.setAttribute(
+            "aria-label",
+            isDark ? "Desativar modo escuro" : "Ativar modo escuro"
+        );
+        themeToggle.querySelector("span:first-child").textContent = isDark ? "☀" : "☾";
+        themeToggle.querySelector("span:last-child").textContent = isDark
+            ? "Modo claro"
+            : "Modo escuro";
+    }
+
+    function initializeTheme() {
+        let savedTheme = "light";
+
+        try {
+            savedTheme = localStorage.getItem("odeen-theme") || "light";
+        } catch (e) {
+            savedTheme = "light";
+        }
+
+        applyTheme(savedTheme === "dark");
+    }
+
+    function show(element, condition) {
+        if (!element) return;
+        element.classList.toggle("visible", Boolean(condition));
+    }
+
+    function value(field) {
+        return field ? field.value.trim() : "";
+    }
+
+    function escapeText(text) {
+        return String(text || "").trim();
+    }
+
+    function setFieldError(field, hasError) {
+        if (!field) return;
+        field.classList.toggle("field-error", hasError);
+    }
+
+    function clearErrors() {
+        document.querySelectorAll(".field-error").forEach(el => {
+            el.classList.remove("field-error");
+        });
+    }
+
+    function updateConditionalFields() {
+        const tipoOcorrencia = value(form.tipoOcorrencia);
+        const adulteracao = value(form.adulteracao);
+        const meio = value(form.meioIdentificacao);
+        const resultado = value(form.resultado);
+        const liberadoNoLocal = value(form.liberadoNoLocal);
+        const quemRecebeu = value(form.quemRecebeu);
+        const destino = value(form.destinoApreensao);
+        const houveGuincho = value(form.houveGuincho);
+
+        show(sections.numeroBoWrapper, value(form.possuiBo) === "SIM");
+
+        show(sections.adulteracaoFields, adulteracao === "SIM");
+
+        show(
+            sections.outroMeioWrapper,
+            adulteracao === "SIM" && meio === "Outro"
+        );
+
+        show(
+            sections.chassiWrapper,
+            adulteracao === "SIM" &&
+            (meio === "Chassi" || meio === "Chassi e motor")
+        );
+
+        show(
+            sections.motorWrapper,
+            adulteracao === "SIM" &&
+            (meio === "Motor" || meio === "Chassi e motor")
+        );
+
+        show(sections.liberacaoFields, resultado === "LIBERADO");
+        show(sections.apreensaoFields, resultado === "APREENDIDO");
+
+        show(
+            sections.liberacaoLocalFields,
+            resultado === "LIBERADO" && liberadoNoLocal === "SIM"
+        );
+
+        show(
+            sections.liberacaoForaFields,
+            resultado === "LIBERADO" && liberadoNoLocal === "NÃO"
+        );
+
+        show(
+            sections.recebedorFields,
+            resultado === "LIBERADO"
+        );
+
+        show(
+            sections.parentescoFields,
+            resultado === "LIBERADO" &&
+            quemRecebeu === "Parente do proprietário"
+        );
+
+        show(
+            sections.outroParentescoWrapper,
+            resultado === "LIBERADO" &&
+            quemRecebeu === "Parente do proprietário" &&
+            value(form.parentesco) === "Outro"
+        );
+
+        show(
+            sections.apreensaoDelegaciaFields,
+            resultado === "APREENDIDO" &&
+            destino === "Delegacia"
+        );
+
+        show(
+            sections.apreensaoPatioFields,
+            resultado === "APREENDIDO" &&
+            destino === "Pátio"
+        );
+
+        show(
+            sections.apreensaoDuplaFields,
+            resultado === "APREENDIDO" &&
+            destino === "Delegacia e posteriormente outro local"
+        );
+
+        show(
+            sections.naoEncaminhadoFields,
+            resultado === "APREENDIDO" &&
+            destino === "Não foi encaminhado"
+        );
+
+        show(
+            sections.manualDelegaciaWrapper,
+            resultado === "APREENDIDO" &&
+            destino === "Delegacia" &&
+            value(form.documentoApreensaoDelegacia) === "MANUAL"
+        );
+
+        show(
+            sections.manualPatioWrapper,
+            resultado === "APREENDIDO" &&
+            destino === "Pátio" &&
+            value(form.documentoApreensaoPatio) === "MANUAL"
+        );
+
+        show(
+            sections.manualDuploWrapper,
+            resultado === "APREENDIDO" &&
+            destino === "Delegacia e posteriormente outro local" &&
+            value(form.documentoDuplo) === "MANUAL"
+        );
+
+        show(
+            sections.manualNaoEncaminhadoWrapper,
+            resultado === "APREENDIDO" &&
+            destino === "Não foi encaminhado" &&
+            value(form.documentoNaoEncaminhado) === "MANUAL"
+        );
+
+        show(sections.guinchoFields, houveGuincho === "SIM");
+    }
+
+    function getData() {
+        return {
+            tipoAtivo: value(form.tipoAtivo),
+            placa: value(form.placa),
+            tipoOcorrencia: value(form.tipoOcorrencia),
+            registro190: value(form.registro190),
+            possuiBo: value(form.possuiBo),
+            numeroBo: value(form.numeroBo),
+            possuiRastreador: value(form.possuiRastreador),
+            localizacao: value(form.localizacao),
+
+            adulteracao: value(form.adulteracao),
+            placaAdulterada: value(form.placaAdulterada),
+            placaVerdadeira: value(form.placaVerdadeira),
+            meioIdentificacao: value(form.meioIdentificacao),
+            outroMeio: value(form.outroMeio),
+            chassi: value(form.chassi),
+            motor: value(form.motor),
+
+            resultado: value(form.resultado),
+
+            liberadoNoLocal: value(form.liberadoNoLocal),
+            documentoLocal: value(form.documentoLocal),
+            numeroDocumentoLocal: value(form.numeroDocumentoLocal),
+
+            documentoFora: value(form.documentoFora),
+            numeroDocumentoFora: value(form.numeroDocumentoFora),
+            delegaciaLiberacao: value(form.delegaciaLiberacao),
+            enderecoDelegaciaLiberacao: value(form.enderecoDelegaciaLiberacao),
+            telefoneDelegaciaLiberacao: value(form.telefoneDelegaciaLiberacao),
+
+            quemRecebeu: value(form.quemRecebeu),
+            sexoRecebedor: value(form.sexoRecebedor),
+            nomeRecebedor: value(form.nomeRecebedor),
+            cpfRecebedor: value(form.cpfRecebedor),
+
+            parentesco: value(form.parentesco),
+            outroParentesco: value(form.outroParentesco),
+            nomeProprietario: value(form.nomeProprietario),
+            cpfProprietario: value(form.cpfProprietario),
+
+            destinoApreensao: value(form.destinoApreensao),
+            numeroBoApreensao: value(form.numeroBoApreensao),
+
+            nomeDelegaciaApreensao: value(form.nomeDelegaciaApreensao),
+            enderecoDelegaciaApreensao: value(form.enderecoDelegaciaApreensao),
+            telefoneDelegaciaApreensao: value(form.telefoneDelegaciaApreensao),
+            documentoApreensaoDelegacia: value(form.documentoApreensaoDelegacia),
+            tipoDocumentoManualDelegacia: value(form.tipoDocumentoManualDelegacia),
+
+            nomePatio: value(form.nomePatio),
+            enderecoPatio: value(form.enderecoPatio),
+            telefonePatio: value(form.telefonePatio),
+            documentoApreensaoPatio: value(form.documentoApreensaoPatio),
+            tipoDocumentoManualPatio: value(form.tipoDocumentoManualPatio),
+
+            nomeDelegaciaApresentacao: value(form.nomeDelegaciaApresentacao),
+            enderecoDelegaciaApresentacao: value(form.enderecoDelegaciaApresentacao),
+            telefoneDelegaciaApresentacao: value(form.telefoneDelegaciaApresentacao),
+
+            tipoLocalDefinitivo: value(form.tipoLocalDefinitivo),
+            nomeLocalDefinitivo: value(form.nomeLocalDefinitivo),
+            enderecoLocalDefinitivo: value(form.enderecoLocalDefinitivo),
+            telefoneLocalDefinitivo: value(form.telefoneLocalDefinitivo),
+            documentoDuplo: value(form.documentoDuplo),
+            tipoDocumentoManualDuplo: value(form.tipoDocumentoManualDuplo),
+
+            documentoNaoEncaminhado: value(form.documentoNaoEncaminhado),
+            tipoDocumentoManualNaoEncaminhado: value(form.tipoDocumentoManualNaoEncaminhado),
+            numeroDocumentoNaoEncaminhado: value(form.numeroDocumentoNaoEncaminhado),
+
+            houveGuincho: value(form.houveGuincho),
+            solicitanteGuincho: value(form.solicitanteGuincho),
+            numeroAssistencia: value(form.numeroAssistencia),
+            motoristaGuincho: value(form.motoristaGuincho),
+            empresaGuincho: value(form.empresaGuincho),
+            destinoGuincho: value(form.destinoGuincho)
+        };
+    }
+
+    function validate(data) {
+        const errors = [];
+        clearErrors();
+
+        function required(field, label) {
+            if (!value(field)) {
+                errors.push(label);
+                setFieldError(field, true);
+            }
+        }
+
+        required(form.tipoAtivo, "Tipo de ativo");
+        required(form.placa, "Placa");
+        required(form.tipoOcorrencia, "Tipo de ocorrência");
+        required(form.registro190, "Registro 190");
+        required(form.possuiBo, "Possui BO");
+        if (data.possuiBo === "SIM") {
+            required(form.numeroBo, "Número do BO");
+        }
+        required(form.possuiRastreador, "Possui rastreador");
+        required(form.localizacao, "Local da recuperação");
+        required(form.adulteracao, "Adulteração");
+        required(form.resultado, "Resultado da recuperação");
+
+        if (data.adulteracao === "SIM") {
+            required(form.placaAdulterada, "Placa adulterada");
+            required(form.placaVerdadeira, "Placa verdadeira");
+            required(form.meioIdentificacao, "Meio de identificação");
+
+            if (data.meioIdentificacao === "Outro") {
+                required(form.outroMeio, "Informe o meio utilizado");
+            }
+
+            if (data.meioIdentificacao === "Chassi") {
+                required(form.chassi, "Chassi");
+            }
+
+            if (data.meioIdentificacao === "Motor") {
+                required(form.motor, "Motor");
+            }
+
+            if (data.meioIdentificacao === "Chassi e motor") {
+                required(form.chassi, "Chassi");
+                required(form.motor, "Motor");
+            }
+        }
+
+        /*
+         * ============================================================
+         * LIBERAÇÃO
+         * ============================================================
+         * Agora toda liberação exige:
+         * - Nome completo
+         * - CPF
+         * - Tipo do Documento da Ocorrência
+         * - Número do Documento da Ocorrência
+         *
+         * As opções são:
+         * - NOC
+         * - Talão Token
+         * - Requisição IC
+         * - BO Auto de Entrega
+         */
+
+        if (data.resultado === "LIBERADO") {
+            required(form.liberadoNoLocal, "Liberação no local");
+
+            required(
+                form.quemRecebeu,
+                "Quem recebeu o ativo"
+            );
+
+            required(
+                form.sexoRecebedor,
+                "Sexo do proprietário/recebedor"
+            );
+
+            required(
+                form.nomeRecebedor,
+                "Nome completo da pessoa que recebeu o ativo"
+            );
+
+            required(
+                form.cpfRecebedor,
+                "CPF da pessoa que recebeu o ativo"
+            );
+
+            /*
+             * LIBERAÇÃO NO LOCAL
+             */
+            if (data.liberadoNoLocal === "SIM") {
+                required(
+                    form.documentoLocal,
+                    "Documento da Ocorrência"
+                );
+
+                required(
+                    form.numeroDocumentoLocal,
+                    "Número do Documento da Ocorrência"
+                );
+            }
+
+            /*
+             * LIBERAÇÃO FORA DO LOCAL
+             */
+            if (data.liberadoNoLocal === "NÃO") {
+                required(
+                    form.documentoFora,
+                    "Documento da Ocorrência"
+                );
+
+                required(
+                    form.numeroDocumentoFora,
+                    "Número do Documento da Ocorrência"
+                );
+
+                required(
+                    form.delegaciaLiberacao,
+                    "Nome da delegacia"
+                );
+
+                required(
+                    form.enderecoDelegaciaLiberacao,
+                    "Endereço da delegacia"
+                );
+
+                required(
+                    form.telefoneDelegaciaLiberacao,
+                    "Telefone da delegacia"
+                );
+            }
+
+            if (data.quemRecebeu === "Parente do proprietário") {
+                required(form.parentesco, "Grau de parentesco");
+                required(form.nomeProprietario, "Nome do proprietário");
+                required(form.cpfProprietario, "CPF do proprietário");
+
+                if (data.parentesco === "Outro") {
+                    required(form.outroParentesco, "Informe o parentesco");
+                }
+            }
+        }
+
+        if (data.resultado === "APREENDIDO") {
+            required(form.destinoApreensao, "Destino da apreensão");
+
+            if (data.destinoApreensao === "Delegacia") {
+                required(form.numeroBoApreensao, "Número do BO");
+                required(form.nomeDelegaciaApreensao, "Delegacia de apreensão");
+                required(form.enderecoDelegaciaApreensao, "Endereço da delegacia de apreensão");
+                required(form.telefoneDelegaciaApreensao, "Telefone da delegacia de apreensão");
+                required(form.documentoApreensaoDelegacia, "Documento da apreensão");
+
+                if (data.documentoApreensaoDelegacia === "MANUAL") {
+                    required(form.tipoDocumentoManualDelegacia, "Tipo de documento manual");
+                }
+            }
+
+            if (data.destinoApreensao === "Pátio") {
+                required(form.numeroBoApreensao, "Número do BO");
+                required(form.nomePatio, "Nome do pátio");
+                required(form.enderecoPatio, "Endereço do pátio");
+                required(form.telefonePatio, "Telefone do pátio");
+                required(form.documentoApreensaoPatio, "Documento da apreensão");
+
+                if (data.documentoApreensaoPatio === "MANUAL") {
+                    required(form.tipoDocumentoManualPatio, "Tipo de documento manual");
+                }
+            }
+
+            if (data.destinoApreensao === "Delegacia e posteriormente outro local") {
+                required(form.numeroBoApreensao, "Número do BO");
+                required(form.nomeDelegaciaApresentacao, "Delegacia de apresentação");
+                required(form.enderecoDelegaciaApresentacao, "Endereço da delegacia de apresentação");
+                required(form.telefoneDelegaciaApresentacao, "Telefone da delegacia de apresentação");
+
+                required(form.tipoLocalDefinitivo, "Tipo do local definitivo");
+                required(form.nomeLocalDefinitivo, "Nome do local definitivo");
+                required(form.enderecoLocalDefinitivo, "Endereço do local definitivo");
+                required(form.telefoneLocalDefinitivo, "Telefone do local definitivo");
+
+                required(form.documentoDuplo, "Documento da apreensão");
+
+                if (data.documentoDuplo === "MANUAL") {
+                    required(form.tipoDocumentoManualDuplo, "Tipo de documento manual");
+                }
+            }
+
+            if (data.destinoApreensao === "Não foi encaminhado") {
+                required(form.documentoNaoEncaminhado, "Documento da ocorrência");
+                required(form.numeroDocumentoNaoEncaminhado, "Número do documento");
+
+                if (data.documentoNaoEncaminhado === "MANUAL") {
+                    required(form.tipoDocumentoManualNaoEncaminhado, "Tipo de documento manual");
+                }
+            }
+        }
+
+        if (data.houveGuincho === "SIM") {
+            if (!data.solicitanteGuincho) {
+                errors.push("Quem solicitou o guincho");
+                setFieldError(form.solicitanteGuincho, true);
+            }
+        }
+
+        return errors;
+    }
+
+    function gerarPrimeiroParagrafo(data) {
+        const ativo = data.tipoAtivo;
+        const placa = data.placa;
+        const local = data.localizacao;
+
+        if (data.possuiBo === "SIM") {
+            const registro = data.registro190 === "SIM"
+                ? `Com queixa e registro e de ${data.tipoOcorrencia} sob o BO ${data.numeroBo}.`
+                : `Com registro de ${data.tipoOcorrencia} sob o BO ${data.numeroBo}.`;
+
+            return `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa}. ${registro} O ativo foi localizado ${local}.`;
+        }
+
+        if (data.tipoOcorrencia === "SEM QUEIXA/REGISTRO") {
+            const rastreador = data.possuiRastreador === "SIM"
+                ? "localizado com auxílio do rastreador"
+                : "localizado e sem auxílio do rastreador";
+
+            return `Equipe ODEEN prosseguiu com a LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa}, ${rastreador} nas imediações: ${local}.`;
+        }
+
+        const rastreador = data.possuiRastreador === "SIM"
+            ? " com auxílio do rastreador"
+            : " e sem auxílio do rastreador";
+
+        let texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado nas imediações de: ${local}.`;
+
+        if (data.possuiRastreador === "SIM") {
+            texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado${rastreador} nas imediações de: ${local}.`;
+        }
+
+        return texto;
+    }
+
+    function gerarAdulteracao(data) {
+        if (data.adulteracao !== "SIM") {
+            return "";
+        }
+
+        let meio = "";
+
+        switch (data.meioIdentificacao) {
+            case "Chassi":
+                meio = `através do chassi ${data.chassi}`;
+                break;
+
+            case "Motor":
+                meio = `através do número do motor ${data.motor}`;
+                break;
+
+            case "Chassi e motor":
+                meio = `através do chassi ${data.chassi} e motor ${data.motor}`;
+                break;
+
+            case "Meios metalográficos":
+                meio = "através de meios metalográficos";
+                break;
+
+            case "Scanner":
+                meio = "através de scanner e meios periciais";
+                break;
+
+            case "Meios periciais":
+                meio = "através de meios periciais";
+                break;
+
+            case "Outro":
+                meio = `através de ${data.outroMeio}`;
+                break;
+
+            default:
+                return "";
+        }
+
+        return `No momento da recuperação o ativo ostentava a placa adulterada ${data.placaAdulterada}, sendo possível a verificação da placa verdadeira ${data.placaVerdadeira} ${meio}.`;
+    }
+
+    function artigoGenero(data) {
+        if (data.sexoRecebedor === "Feminino") {
+            return {
+                proprietario: "proprietária",
+                locatario: "locatária"
+            };
+        }
+
+        return {
+            proprietario: "proprietário",
+            locatario: "locatário"
+        };
+    }
+
+    function tipoPessoa(data) {
+        const genero = artigoGenero(data);
+
+        if (data.quemRecebeu === "Proprietário") {
+            return genero.proprietario;
+        }
+
+        if (data.quemRecebeu === "Locatário") {
+            return genero.locatario;
+        }
+
+        if (data.quemRecebeu === "Representante") {
+            return "representante";
+        }
+
+        return genero.proprietario;
+    }
+
+    function gerarRecebedor(data) {
+        const genero = artigoGenero(data);
+
+        if (data.quemRecebeu === "Parente do proprietário") {
+            let parentesco = data.parentesco;
+
+            if (parentesco === "Outro") {
+                parentesco = data.outroParentesco;
+            }
+
+            return `à ${genero.proprietario}: ${data.nomeProprietario}, CPF: ${data.cpfProprietario}, e Recebedor (${parentesco}): ${data.nomeRecebedor}, CPF: ${data.cpfRecebedor}`;
+        }
+
+        const pessoa = tipoPessoa(data);
+        const preposicao = pessoa === "proprietária" ||
+            pessoa === "locatária" ? "à" : "ao";
+
+        return `${preposicao} ${pessoa}: ${data.nomeRecebedor}, CPF: ${data.cpfRecebedor}`;
+    }
+
+    /*
+     * Retorna o texto correto para qualquer documento de liberação.
+     */
+    function textoDocumentoLiberacao(tipo, numero) {
+        switch (tipo) {
+            case "NOC":
+                return `NOC Nº: ${numero}`;
+
+            case "Talão Token":
+                return `Talão Token Nº: ${numero}`;
+
+            case "Requisição IC":
+                return `Requisição IC Nº: ${numero}`;
+
+            case "BO Auto de Entrega":
+                return `BO AUTO DE ENTREGA Nº: ${numero}`;
+
+            default:
+                return `Documento da Ocorrência Nº: ${numero}`;
+        }
+    }
+
+    function gerarLiberacaoLocal(data) {
+        const recebedor = gerarRecebedor(data);
+        const documento = textoDocumentoLiberacao(
+            data.documentoLocal,
+            data.numeroDocumentoLocal
+        );
+
+        return `Após a recuperação, o ativo foi liberado ${recebedor} através do ${documento}, confeccionado pelas autoridades no local da ocorrência.`;
+    }
+
+    function gerarLiberacaoFora(data) {
+        const recebedor = gerarRecebedor(data);
+
+        const documento = textoDocumentoLiberacao(
+            data.documentoFora,
+            data.numeroDocumentoFora
+        );
+
+        const paragrafo =
+            `Após a recuperação do ${data.tipoAtivo}, o ativo foi encaminhado para ${data.delegaciaLiberacao}, sendo utilizado o ${documento}, assim liberando o ativo ${recebedor}.`;
+
+        const nomeDocumento = data.documentoFora === "BO Auto de Entrega"
+            ? "BO AUTO DE ENTREGA"
+            : data.documentoFora;
+
+        const blocoDelegacia =
+            `Delegacia Responsável:\n\n` +
+            `${data.delegaciaLiberacao}\n` +
+            `Endereço: ${data.enderecoDelegaciaLiberacao}\n` +
+            `Telefone: ${data.telefoneDelegaciaLiberacao}\n` +
+            `N de ${nomeDocumento}: ${data.numeroDocumentoFora}`;
+
+        return `${paragrafo}\n\n${blocoDelegacia}\n\nDessa forma, o caso é concluído com o presente status.`;
+    }
+
+    function gerarGuincho(data) {
+        if (data.houveGuincho !== "SIM") {
+            return "";
+        }
+
+        let tipo = data.solicitanteGuincho || "guincho";
+
+        if (data.solicitanteGuincho === "Credenciado") {
+            tipo = "guincho credenciado";
+        }
+
+        let frase = `Após a recuperação, foi acionado um ${tipo}`;
+
+        if (data.empresaGuincho) {
+            frase += ` ${data.empresaGuincho}`;
+        }
+
+        frase += ` para o recolhimento do veículo`;
+
+        if (data.destinoGuincho) {
+            frase += ` para ${data.destinoGuincho}`;
+        } else {
+            frase += " para uma base segura";
+        }
+
+        if (data.tipoOcorrencia === "SEM QUEIXA/REGISTRO") {
+            frase += ", tendo em vista que não havia restrições no veículo.";
+        } else {
+            frase += ".";
+        }
+
+        const detalhes = [];
+
+        if (data.empresaGuincho) {
+            detalhes.push(`Guincho ${data.empresaGuincho}:`);
+        } else {
+            detalhes.push("Guincho:");
+        }
+
+        if (data.numeroAssistencia) {
+            detalhes.push(`Assistência: ${data.numeroAssistencia}`);
+        }
+
+        if (data.motoristaGuincho) {
+            detalhes.push(`Motorista: ${data.motoristaGuincho}`);
+        }
+
+        if (data.empresaGuincho) {
+            detalhes.push(`Empresa: ${data.empresaGuincho}`);
+        }
+
+        return `${frase}\n\n${detalhes.join("\n")}`;
+    }
+
+    function documentoApreensao(tipo, manual, numero) {
+        let nome = tipo;
+
+        if (tipo === "MANUAL") {
+            nome = manual;
+        }
+
+        return `${nome} Nº ${numero}`;
+    }
+
+    function gerarApreensaoDelegacia(data) {
+        const documento = documentoApreensao(
+            data.documentoApreensaoDelegacia,
+            data.tipoDocumentoManualDelegacia,
+            data.numeroBoApreensao
+        );
+
+        const localTexto =
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomeDelegaciaApreensao}, onde foi apresentado e o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+
+        const bloco =
+            `Delegacia de Apreensão:\n\n` +
+            `${data.nomeDelegaciaApreensao}\n` +
+            `Endereço: ${data.enderecoDelegaciaApreensao}\n` +
+            `Telefone: ${data.telefoneDelegaciaApreensao}\n\n` +
+            `B.O: ${data.numeroBoApreensao}.`;
+
+        return `${localTexto}\n\n${bloco}\n\nDesta forma encerramos o caso com o presente status.`;
+    }
+
+    function gerarApreensaoPatio(data) {
+        const documento = documentoApreensao(
+            data.documentoApreensaoPatio,
+            data.tipoDocumentoManualPatio,
+            data.numeroBoApreensao
+        );
+
+        const localTexto =
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomePatio}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+
+        const bloco =
+            `Pátio de Apreensão:\n\n` +
+            `${data.nomePatio}\n` +
+            `Endereço: ${data.enderecoPatio}\n` +
+            `Telefone: ${data.telefonePatio}\n\n` +
+            `B.O: ${data.numeroBoApreensao}.`;
+
+        return `${localTexto}\n\n${bloco}\n\nDesta forma encerramos o caso com o presente status.`;
+    }
+
+    function gerarApreensaoDupla(data) {
+        const documento = documentoApreensao(
+            data.documentoDuplo,
+            data.tipoDocumentoManualDuplo,
+            data.numeroBoApreensao
+        );
+
+        const localTexto =
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomeDelegaciaApresentacao}, onde foi apresentado e posteriormente o ativo foi direcionado para ${data.nomeLocalDefinitivo}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+
+        const blocoApresentacao =
+            `Delegacia de apresentação:\n\n` +
+            `${data.nomeDelegaciaApresentacao}\n` +
+            `Endereço: ${data.enderecoDelegaciaApresentacao}\n` +
+            `Telefone: ${data.telefoneDelegaciaApresentacao}`;
+
+        const tituloFinal =
+            data.tipoLocalDefinitivo === "Pátio"
+                ? "Pátio de Apreensão:"
+                : "Delegacia de Apreensão:";
+
+        const blocoFinal =
+            `${tituloFinal}\n\n` +
+            `${data.nomeLocalDefinitivo}\n` +
+            `Endereço: ${data.enderecoLocalDefinitivo}\n` +
+            `Telefone: ${data.telefoneLocalDefinitivo}\n\n` +
+            `B.O: ${data.numeroBoApreensao}.`;
+
+        return `${localTexto}\n\n${blocoApresentacao}\n\n${blocoFinal}\n\nDesta forma encerramos o caso com o presente status.`;
+    }
+
+    function gerarNaoEncaminhado(data) {
+        const documento = documentoApreensao(
+            data.documentoNaoEncaminhado,
+            data.tipoDocumentoManualNaoEncaminhado,
+            data.numeroDocumentoNaoEncaminhado
+        );
+
+        return (
+            `Após localização do ativo em via pública, foram realizados os trâmites legais referentes à ocorrência, permanecendo o ${data.tipoAtivo} sem encaminhamento para delegacia ou pátio, sob o ${documento}.\n\n` +
+            `B.O: ${data.numeroBoApreensao || data.numeroDocumentoNaoEncaminhado}.\n\n` +
+            `Desta forma encerramos o caso com o presente status.`
+        );
+    }
+
+    function gerarApreensao(data) {
+        switch (data.destinoApreensao) {
+            case "Delegacia":
+                return gerarApreensaoDelegacia(data);
+
+            case "Pátio":
+                return gerarApreensaoPatio(data);
+
+            case "Delegacia e posteriormente outro local":
+                return gerarApreensaoDupla(data);
+
+            case "Não foi encaminhado":
+                return gerarNaoEncaminhado(data);
+
+            default:
+                return "";
+        }
+    }
+
+    function gerarFormalizacao(data) {
+        const partes = [];
+
+        partes.push(gerarPrimeiroParagrafo(data));
+
+        const adulteracao = gerarAdulteracao(data);
+        if (adulteracao) {
+            partes.push(adulteracao);
+        }
+
+        if (data.resultado === "LIBERADO") {
+            if (data.liberadoNoLocal === "SIM") {
+                partes.push(gerarLiberacaoLocal(data));
+
+                partes.push(
+                    "Dessa forma, após trâmites legais, encerramos o caso com o presente status."
+                );
+
+            } else if (data.liberadoNoLocal === "NÃO") {
+                partes.push(gerarLiberacaoFora(data));
+            }
+        }
+
+        if (data.resultado === "APREENDIDO") {
+            partes.push(gerarApreensao(data));
+        }
+
+        const guincho = gerarGuincho(data);
+
+        if (guincho) {
+            partes.push(guincho);
+
+            if (
+                data.resultado !== "APREENDIDO" &&
+                !partes.some(p => /Dessa forma|Desta forma/.test(p))
+            ) {
+                partes.push(
+                    "Dessa forma finalizamos o caso com o presente status."
+                );
+            }
+        }
+
+        return partes
+            .map(p => escapeText(p))
+            .filter(Boolean)
+            .join("\n\n");
+    }
+
+    function updatePreview() {
+        updateConditionalFields();
+
+        const data = getData();
+
+        const hasBasicData =
+            data.tipoAtivo &&
+            data.placa &&
+            data.tipoOcorrencia &&
+            data.localizacao;
+
+        if (!hasBasicData) {
+            preview.value = "";
+            statusBadge.textContent = "Aguardando dados";
+            statusBadge.className = "status-badge";
+            return;
+        }
+
+        const errors = validate(data);
+
+        if (errors.length > 0) {
+            preview.value = gerarPreviewParcial(data);
+            statusBadge.textContent = `${errors.length} campo(s) pendente(s)`;
+            statusBadge.className = "status-badge error";
+            return;
+        }
+
+        preview.value = gerarFormalizacao(data);
+        statusBadge.textContent = "Pronto";
+        statusBadge.className = "status-badge ready";
+    }
+
+    function gerarPreviewParcial(data) {
+        let texto = "";
+
+        try {
+            texto = gerarPrimeiroParagrafo(data);
+
+            const adulteracao = gerarAdulteracao(data);
+            if (adulteracao) {
+                texto += `\n\n${adulteracao}`;
+            }
+        } catch (e) {
+            texto = "";
+        }
+
+        return texto;
+    }
+
+    function showValidation(errors) {
+        if (!errors.length) {
+            validation.innerHTML = "";
+            validation.classList.remove("visible");
+            return;
+        }
+
+        validation.innerHTML =
+            `<strong>Preencha os campos obrigatórios:</strong>` +
+            `<ul>${errors.map(error => `<li>${escapeHTML(error)}</li>`).join("")}</ul>`;
+
+        validation.classList.add("visible");
+    }
+
+    function escapeHTML(text) {
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function generateFinal() {
+        updateConditionalFields();
+
+        const data = getData();
+        const errors = validate(data);
+
+        showValidation(errors);
+
+        if (errors.length) {
+            statusBadge.textContent = `${errors.length} pendência(s)`;
+            statusBadge.className = "status-badge error";
+
+            const firstError = document.querySelector(".field-error");
+
+            if (firstError) {
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                firstError.focus();
+            }
+
+            return;
+        }
+
+        preview.value = gerarFormalizacao(data);
+        statusBadge.textContent = "Formalização pronta";
+        statusBadge.className = "status-badge ready";
+
+        preview.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+    async function copyFormalizacao() {
+        const texto = preview.value.trim();
+
+        if (!texto) {
+            showToast("Não há formalização para copiar.");
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(texto);
+            showToast("Formalização copiada para a área de transferência.");
+        } catch (error) {
+            preview.select();
+            document.execCommand("copy");
+            showToast("Formalização copiada.");
+        }
+    }
+
+    function clearForm() {
+        const confirmed = confirm(
+            "Deseja realmente limpar todos os dados preenchidos?"
+        );
+
+        if (!confirmed) return;
+
+        document.querySelectorAll("input, textarea, select").forEach(field => {
+            if (field.tagName === "SELECT") {
+                field.selectedIndex = 0;
+            } else {
+                field.value = "";
+            }
+        });
+
+        clearErrors();
+        validation.innerHTML = "";
+        validation.classList.remove("visible");
+
+        preview.value = "";
+        statusBadge.textContent = "Aguardando dados";
+        statusBadge.className = "status-badge";
+
+        updateConditionalFields();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        showToast("Formulário limpo.");
+    }
+
+    let toastTimer;
+
+    function showToast(message) {
+        clearTimeout(toastTimer);
+
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2600);
+    }
+
+    /* ==================== FORMALIZAÇÕES PADRÕES ==================== */
+
+    const padraoTipo = $("padraoTipo");
+    const padraoCampos = $("padraoCampos");
+    const padraoPreview = $("padraoPreview");
+    const padraoValidation = $("padraoValidation");
+    const padraoStatus = $("padraoStatus");
+
+    const padraoTemplates = {
+        SS: `
+            <div class="subsection">
+                <h3>Dados do padrão com SS</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Operação <span class="required">*</span></label><select id="pOperacao"><option value="">Selecione...</option><option>RETORNO VENCIDO</option><option>OP CRITICO</option><option>PRONTA RESPOSTA</option></select></div>
+                    <div class="field full"><label>Localização <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field full"><label>Mensagem da SS <span class="required">*</span></label><textarea id="pMensagemSS" rows="7" placeholder="Cole aqui a mensagem completa recebida da SS."></textarea></div>
+                </div>
+            </div>`,
+
+        RV: `
+            <div class="subsection">
+                <h3>Dados da Base de Perda</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Local da recuperação <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field"><label>Matriz <span class="required">*</span></label><select id="pMatriz"><option value="LOCALIZA">LOCALIZA</option><option value="OUTRO">OUTRO</option></select></div>
+                    <div id="pOutroMatrizWrap" class="field conditional"><label>Digite a Matriz <span class="required">*</span></label><input id="pOutroMatriz" type="text"></div>
+                    <div class="field"><label>Placa ostentada <span class="required">*</span></label><input id="pPlacaOstentada" type="text"></div>
+                    <div class="field"><label>Meio de identificação utilizado <span class="required">*</span></label><select id="pIdentificacao"><option value="">Selecione...</option><option value="Chassi">Chassi</option><option value="Motor">Motor</option><option value="Chassi e motor">Chassi e motor</option><option value="Meios metalográficos">Meios metalográficos</option><option value="Scanner">Scanner</option><option value="Meios periciais">Meios periciais</option><option value="Outro">Outro</option></select></div>
+                    <div id="pOutroIdentificacaoWrap" class="field conditional"><label>Informe o meio utilizado <span class="required">*</span></label><input id="pOutroIdentificacao" type="text"></div>
+                    <div id="pChassiWrap" class="field conditional"><label>Chassi <span class="required">*</span></label><input id="pChassi" type="text"></div>
+                    <div id="pMotorWrap" class="field conditional"><label>Motor <span class="required">*</span></label><input id="pMotor" type="text"></div>
+                    <div class="field"><label>DP de apresentação e apreensão <span class="required">*</span></label><input id="pDelegaciaApresentacao" type="text"></div>
+                    <div class="field"><label>Endereço da DP <span class="required">*</span></label><input id="pEndereco" type="text"></div>
+                    <div class="field"><label>Telefone da DP <span class="required">*</span></label><input id="pTelefone" type="text"></div>
+                    <div class="field"><label>Número do B.O. de Apreensão <span class="required">*</span></label><input id="pBO" type="text"></div>
+                    <div class="field"><label>Foi levado para um pátio ou outra DP? <span class="required">*</span></label><select id="pDestinoPosterior"><option value="">Selecione...</option><option value="NAO">NÃO</option><option value="SIM">SIM</option></select></div>
+                    <div id="pTipoDestinoWrap" class="field conditional"><label>Destino posterior <span class="required">*</span></label><select id="pTipoDestino"><option value="">Selecione...</option><option value="PÁTIO DE APREENSÃO">PÁTIO DE APREENSÃO</option><option value="OUTRA DELEGACIA DE POLÍCIA">OUTRA DELEGACIA DE POLÍCIA</option></select></div>
+                </div>
+
+                <div id="pRvDestinoDelegacia" class="subsection conditional">
+                    <h3>Dados da outra Delegacia de Polícia</h3>
+                    <div class="grid">
+                        <div class="field"><label>Nome da Delegacia <span class="required">*</span></label><input id="pDelegaciaDestino"></div>
+                        <div class="field"><label>Endereço <span class="required">*</span></label><input id="pEnderecoDestino"></div>
+                        <div class="field"><label>Telefone <span class="required">*</span></label><input id="pTelefoneDestino"></div>
+                        <div class="field"><label>Número do B.O. de Apreensão <span class="required">*</span></label><input id="pBODestino"></div>
+                    </div>
+                </div>
+
+                <div id="pRvPatio" class="subsection conditional">
+                    <h3>Dados do Pátio</h3>
+                    <div class="grid">
+                        <div class="field"><label>Nome do Pátio <span class="required">*</span></label><input id="pPatio"></div>
+                        <div class="field"><label>Endereço <span class="required">*</span></label><input id="pEnderecoPatio"></div>
+                        <div class="field"><label>Telefone <span class="required">*</span></label><input id="pTelefonePatio"></div>
+                    </div>
+                </div>
+            </div>`,
+
+        GUINCHO_LM: `
+            <div class="subsection">
+                <h3>Dados da formalização via guincho</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Localização <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field"><label>Matriz <span class="required">*</span></label><select id="pMatriz"><option value="">Selecione...</option><option>LM</option><option>MOTTU</option><option>OUTRO</option></select></div>
+                    <div id="pOutroMatrizWrap" class="field conditional"><label>Digite a Matriz <span class="required">*</span></label><input id="pOutroMatriz" type="text"></div>
+                    <div id="pProdutoWrap" class="field conditional"><label>Produto <span class="required">*</span></label><select id="pProduto"><option value="">Selecione...</option><option>SIGN & DRIVE VW</option><option>LM RAC</option></select></div>
+                    <div id="pAssistenciaWrap" class="field conditional"><label>Número da Assistência</label><input id="pAssistencia" type="text"><div class="help-text">Se o veículo foi recolhido por guincho credenciado LM, informe o Número da Assistência.</div></div>
+                </div>
+            </div>`,
+
+        FECHAMENTO_BASE_LOCALIZA: `
+            <div class="subsection">
+                <h3>Veículo encontrado em guincho/oficina credenciada Localiza</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Tipo de estabelecimento <span class="required">*</span></label><select id="pTipoBase"><option value="">Selecione...</option><option value="GUINCHO">Guincho credenciado</option><option value="OFICINA">Oficina credenciada</option></select></div>
+                    <div class="field full"><label>Endereço do rastreio <span class="required">*</span></label><input id="pLocal" type="text" placeholder="Endereço indicado pelo rastreamento"></div>
+                    <div class="field full"><label>Endereço da base do guincho/oficina <span class="required">*</span></label><input id="pEnderecoBase" type="text"></div>
+                    <div class="field full"><label>Relato / conclusões <span class="required">*</span></label><textarea id="pRelatoBase" rows="5" placeholder="Descreva o que foi constatado no local e a confirmação com o responsável/matriz."></textarea></div>
+                    <div class="field full"><label>Dados da SS <span class="required">*</span></label><textarea id="pDadosSSBase" rows="5" placeholder="Empresa, endereço, CNPJ, telefone e número da SS."></textarea></div>
+                </div>
+            </div>`,
+
+        AVERIGUACAO_OK: `
+            <div class="subsection">
+                <h3>Averiguação — veículo localizado em segurança</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field full"><label>Endereço da localização <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field"><label>Nome do condutor/possuidor <span class="required">*</span></label><input id="pCondutorOk" type="text"></div>
+                    <div class="field"><label>CPF ou CNH (opcional)</label><input id="pDocumentoOk" type="text" placeholder="CPF ou CNH, se disponível"></div>
+                    <div class="field full"><label>Conclusão da liberação / relato <span class="required">*</span></label><textarea id="pConclusaoOk" rows="5" placeholder="Explique por que foi constatado que o veículo estava em segurança e registre a orientação da matriz."></textarea></div>
+                </div>
+            </div>`,
+
+        VEICULO_ATIVIDADE_CRIMINOSA: `
+            <div class="subsection">
+                <h3>Veículo utilizado em atividade criminosa</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Utilizou rastreador? <span class="required">*</span></label><select id="pRastreadorCrime"><option value="">Selecione...</option><option value="SIM">COM AUXÍLIO DE RASTREADOR</option><option value="NAO">SEM AUXÍLIO DO RASTREADOR</option></select></div>
+                    <div class="field full"><label>Endereço de localização <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field full"><label>Relato da atividade criminosa <span class="required">*</span></label><textarea id="pRelatoCrime" rows="6" placeholder="Descreva a atividade criminosa e as providências adotadas."></textarea></div>
+                    <div class="field full"><label>Delegacia/unidade de apresentação e apreensão <span class="required">*</span></label><input id="pDelegaciaCrime" type="text"></div>
+                    <div class="field full"><label>Endereço da delegacia/unidade <span class="required">*</span></label><input id="pEnderecoCrime" type="text"></div>
+                    <div class="field"><label>Telefone da delegacia/unidade <span class="required">*</span></label><input id="pTelefoneCrime" type="text"></div>
+                    <div class="field"><label>B.O. de apreensão <span class="required">*</span></label><input id="pBOCrime" type="text"></div>
+                    <div class="field"><label>Foi encaminhado também para pátio? <span class="required">*</span></label><select id="pCrimePatio"><option value="">Selecione...</option><option value="NAO">NÃO</option><option value="SIM">SIM</option></select></div>
+                </div>
+                <div id="pCrimePatioFields" class="subsection conditional">
+                    <h3>Dados do pátio de apreensão</h3>
+                    <div class="grid">
+                        <div class="field"><label>Nome do pátio <span class="required">*</span></label><input id="pPatioCrime"></div>
+                        <div class="field"><label>Endereço do pátio <span class="required">*</span></label><input id="pEnderecoPatioCrime"></div>
+                        <div class="field"><label>Telefone do pátio <span class="required">*</span></label><input id="pTelefonePatioCrime"></div>
+                    </div>
+                </div>
+            </div>`,
+
+        INICIO_RECUPERACAO_HDI: `
+            <div class="subsection">
+                <h3>Dados do início da recuperação HDI</h3>
+                <div class="grid">
+                    <div class="field"><label for="pDataHDI">Data <span class="required">*</span></label><input id="pDataHDI" type="date"></div>
+                    <div class="field"><label for="pHorarioHDI">Horário <span class="required">*</span></label><input id="pHorarioHDI" type="time"></div>
+                    <div class="field"><label for="pPlaca">Placa <span class="required">*</span></label><input id="pPlaca" type="text" placeholder="Informe a placa"></div>
+                    <div class="field"><label for="pTipoOcorrenciaHDI">Tipo de ocorrência <span class="required">*</span></label><select id="pTipoOcorrenciaHDI"><option value="">Selecione...</option><option value="ROUBO/FURTO">ROUBO/FURTO</option><option value="ROUBO">ROUBO</option><option value="FURTO">FURTO</option><option value="APROPRIAÇÃO INDÉBITA">APROPRIAÇÃO INDÉBITA</option></select></div>
+                    <div class="field full"><label for="pLocalHDI">Endereço <span class="required">*</span></label><textarea id="pLocalHDI" rows="3" placeholder="Informe o endereço da localização"></textarea></div>
+                    <div class="field"><label for="pApoliceHDI">Apólice <span class="required">*</span></label><input id="pApoliceHDI" type="text" placeholder="Informe a apólice"></div>
+                    <div class="field"><label for="pSinistroHDI">Sinistro (opcional)</label><input id="pSinistroHDI" type="text" placeholder="Informe o sinistro, se disponível"></div>
+                </div>
+            </div>`,
+
+        AGENCIA: `
+            <div class="subsection">
+                <h3>Dados da entrega em agência</h3>
+                <div class="grid">
+                    <div class="field"><label>Placa <span class="required">*</span></label><input id="pPlaca" type="text"></div>
+                    <div class="field"><label>Operação <span class="required">*</span></label><select id="pOperacao"><option value="">Selecione...</option><option>RETORNO VENCIDO</option><option>OP CRITICO</option><option>PRONTA RESPOSTA</option></select></div>
+                    <div class="field"><label>Rastreador <span class="required">*</span></label><select id="pRastreador"><option value="">Selecione...</option><option>COM AUXÍLIO DE RASTREADOR</option><option>SEM AUXÍLIO DE RASTREADOR</option></select></div>
+                    <div class="field"><label>Localização <span class="required">*</span></label><input id="pLocal" type="text"></div>
+                    <div class="field"><label>Agência <span class="required">*</span></label><input id="pAgencia" type="text"></div>
+                    <div class="field"><label>Endereço da Agência <span class="required">*</span></label><input id="pEndereco" type="text"></div>
+                    <div class="field"><label>Telefone da Agência <span class="required">*</span></label><input id="pTelefone" type="text"></div>
+                    <div class="field"><label>Colaborador <span class="required">*</span></label><input id="pColaborador" type="text"></div>
+                    <div class="field"><label>Matrícula <span class="required">*</span></label><input id="pMatricula" type="text"></div>
+                </div>
+            </div>`,
+
+        PRONTA_RESPOSTA_SEM_SUCESSO: `
+            <div class="subsection">
+                <h3>Pronta Resposta — Averiguação sem sucesso no visual</h3>
+                <div class="grid">
+                    <div class="field">
+                        <label for="pPlaca">Placa <span class="required">*</span></label>
+                        <input id="pPlaca" type="text" placeholder="Informe a placa">
+                    </div>
+                    <div class="field full">
+                        <label for="pLocal">Endereço da última comunicação do rastreador <span class="required">*</span></label>
+                        <textarea id="pLocal" rows="3" placeholder="Informe o endereço ou as proximidades indicadas pelo rastreador"></textarea>
+                    </div>
+                </div>
+            </div>`,
+
+        PRONTA_RESPOSTA_RASTREADOR: `
+            <div class="subsection">
+                <h3>Pronta Resposta — Rastreador localizado</h3>
+                <div class="grid">
+                    <div class="field">
+                        <label for="pPlaca">Placa <span class="required">*</span></label>
+                        <input id="pPlaca" type="text" placeholder="Informe a placa">
+                    </div>
+                    <div class="field full">
+                        <label for="pLocal">Endereço da última comunicação do rastreador <span class="required">*</span></label>
+                        <textarea id="pLocal" rows="3" placeholder="Informe o endereço ou as proximidades indicadas pelo rastreador"></textarea>
+                    </div>
+                    <div class="field full">
+                        <label for="pRastreadorIMEI">RT IMEI (opcional)</label>
+                        <input id="pRastreadorIMEI" type="text" placeholder="Informe o ID/IMEI do rastreador, se disponível">
+                    </div>
+                </div>
+            </div>`,
+
+        PERDA: `
+            <div class="subsection">
+                <div class="standard-note">
+                    <strong>Formalização Base de Perda:</strong> o modelo textual e os campos específicos desta formalização não foram definidos no material de especificação recebido. Nenhum texto foi inventado para evitar alterar o padrão operacional.
+                </div>
+            </div>`
+    };
+
+    function padraoShow(el, condition) {
+        if (el) el.classList.toggle("visible", !!condition);
+    }
+
+    function pval(id) {
+        const el = $(id);
+        return el ? el.value.trim() : "";
+    }
+
+    function renderPadraoCampos() {
+        padraoCampos.innerHTML = padraoTemplates[padraoTipo.value] || "";
+
+        updatePadraoConditionals();
+
+        padraoPreview.value = "";
+
+        padraoValidation.classList.remove("visible");
+
+        padraoStatus.textContent =
+            padraoTipo.value === "PERDA"
+                ? "Modelo pendente"
+                : "Aguardando dados";
+
+        padraoStatus.className = "status-badge";
+
+        padraoCampos.querySelectorAll("input, select, textarea").forEach(el => {
+            el.addEventListener("input", () => {
+                updatePadraoConditionals();
+                previewPadrao(false);
+            });
+
+            el.addEventListener("change", () => {
+                updatePadraoConditionals();
+                previewPadrao(false);
+            });
+        });
+    }
+
+    function updatePadraoConditionals() {
+        if (padraoTipo.value === "RV") {
+            padraoShow($("pOutroMatrizWrap"), pval("pMatriz") === "OUTRO");
+
+            const ident = pval("pIdentificacao");
+
+            padraoShow(
+                $("pOutroIdentificacaoWrap"),
+                ident === "Outro"
+            );
+
+            padraoShow(
+                $("pChassiWrap"),
+                ident === "Chassi" || ident === "Chassi e motor"
+            );
+
+            padraoShow(
+                $("pMotorWrap"),
+                ident === "Motor" || ident === "Chassi e motor"
+            );
+
+            const posterior = pval("pDestinoPosterior");
+            const destino = pval("pTipoDestino");
+
+            padraoShow(
+                $("pTipoDestinoWrap"),
+                posterior === "SIM"
+            );
+
+            padraoShow(
+                $("pRvPatio"),
+                posterior === "SIM" &&
+                destino === "PÁTIO DE APREENSÃO"
+            );
+
+            padraoShow(
+                $("pRvDestinoDelegacia"),
+                posterior === "SIM" &&
+                destino === "OUTRA DELEGACIA DE POLÍCIA"
+            );
+        }
+
+        if (padraoTipo.value === "VEICULO_ATIVIDADE_CRIMINOSA") {
+            padraoShow($("pCrimePatioFields"), pval("pCrimePatio") === "SIM");
+        }
+
+        if (padraoTipo.value === "GUINCHO_LM") {
+            const m = pval("pMatriz");
+
+            padraoShow(
+                $("pOutroMatrizWrap"),
+                m === "OUTRO"
+            );
+
+            padraoShow(
+                $("pProdutoWrap"),
+                m === "LM"
+            );
+
+            padraoShow(
+                $("pAssistenciaWrap"),
+                m === "LM"
+            );
+        }
+    }
+
+    function padraoData() {
+        return {
+            tipo: padraoTipo.value,
+            placa: pval("pPlaca"),
+            operacao: pval("pOperacao"),
+            local: pval("pLocal"),
+            mensagemSS: pval("pMensagemSS"),
+            dataHDI: pval("pDataHDI"),
+            horarioHDI: pval("pHorarioHDI"),
+            tipoOcorrenciaHDI: pval("pTipoOcorrenciaHDI"),
+            localHDI: pval("pLocalHDI"),
+            apoliceHDI: pval("pApoliceHDI"),
+            sinistroHDI: pval("pSinistroHDI"),
+
+            matriz: pval("pMatriz"),
+            outroMatriz: pval("pOutroMatriz"),
+            placaOstentada: pval("pPlacaOstentada"),
+            identidade: pval("pIdentidade"),
+            destino: pval("pDestino"),
+
+            identificacao: pval("pIdentificacao"),
+            outroIdentificacao: pval("pOutroIdentificacao"),
+            chassi: pval("pChassi"),
+            motor: pval("pMotor"),
+
+            delegaciaApresentacao: pval("pDelegaciaApresentacao"),
+            endereco: pval("pEndereco"),
+            telefone: pval("pTelefone"),
+            bo: pval("pBO"),
+
+            destinoPosterior: pval("pDestinoPosterior"),
+            tipoDestino: pval("pTipoDestino"),
+
+            delegaciaDestino: pval("pDelegaciaDestino"),
+            enderecoDestino: pval("pEnderecoDestino"),
+            telefoneDestino: pval("pTelefoneDestino"),
+            boDestino: pval("pBODestino"),
+
+            patio: pval("pPatio"),
+            enderecoPatio: pval("pEnderecoPatio"),
+            telefonePatio: pval("pTelefonePatio"),
+
+            produto: pval("pProduto"),
+            assistencia: pval("pAssistencia"),
+            rastreador: pval("pRastreador"),
+            rastreadorIMEI: pval("pRastreadorIMEI"),
+            tipoBase: pval("pTipoBase"),
+            enderecoBase: pval("pEnderecoBase"),
+            relatoBase: pval("pRelatoBase"),
+            dadosSSBase: pval("pDadosSSBase"),
+            condutorOk: pval("pCondutorOk"),
+            documentoOk: pval("pDocumentoOk"),
+            conclusaoOk: pval("pConclusaoOk"),
+            rastreadorCrime: pval("pRastreadorCrime"),
+            relatoCrime: pval("pRelatoCrime"),
+            delegaciaCrime: pval("pDelegaciaCrime"),
+            enderecoCrime: pval("pEnderecoCrime"),
+            telefoneCrime: pval("pTelefoneCrime"),
+            boCrime: pval("pBOCrime"),
+            crimePatio: pval("pCrimePatio"),
+            patioCrime: pval("pPatioCrime"),
+            enderecoPatioCrime: pval("pEnderecoPatioCrime"),
+            telefonePatioCrime: pval("pTelefonePatioCrime"),
+            agencia: pval("pAgencia"),
+            colaborador: pval("pColaborador"),
+            matricula: pval("pMatricula")
+        };
+    }
+
+    function validatePadrao(d) {
+        const e = [];
+
+        const req = (v, n) => {
+            if (!v) e.push(n);
+        };
+
+        if (!d.tipo) {
+            e.push("Tipo de formalização");
+            return e;
+        }
+
+        if (d.tipo === "PERDA") return e;
+
+        req(d.placa, "Placa");
+        if (d.tipo === "INICIO_RECUPERACAO_HDI") {
+            req(d.localHDI, "Endereço");
+        } else {
+            req(d.local, "Localização");
+        }
+
+        if (d.tipo === "SS") {
+            req(d.operacao, "Operação");
+            req(d.mensagemSS, "Mensagem da SS");
+        }
+
+        if (d.tipo === "RV") {
+            req(d.matriz, "Matriz");
+            req(d.placaOstentada, "Placa ostentada");
+            req(d.identificacao, "Meio de identificação utilizado");
+
+            req(d.delegaciaApresentacao, "DP de apresentação e apreensão");
+            req(d.endereco, "Endereço da DP");
+            req(d.telefone, "Telefone da DP");
+            req(d.bo, "Número do B.O. de Apreensão");
+
+            req(
+                d.destinoPosterior,
+                "Foi levado para um pátio ou outra DP?"
+            );
+
+            if (d.matriz === "OUTRO") {
+                req(d.outroMatriz, "Digite a Matriz");
+            }
+
+            if (d.identificacao === "Outro") {
+                req(d.outroIdentificacao, "Informe o meio utilizado");
+            }
+
+            if (d.identificacao === "Chassi") {
+                req(d.chassi, "Chassi");
+            }
+
+            if (d.identificacao === "Motor") {
+                req(d.motor, "Motor");
+            }
+
+            if (d.identificacao === "Chassi e motor") {
+                req(d.chassi, "Chassi");
+                req(d.motor, "Motor");
+            }
+
+            if (d.destinoPosterior === "SIM") {
+                req(d.tipoDestino, "Destino posterior");
+
+                if (d.tipoDestino === "PÁTIO DE APREENSÃO") {
+                    req(d.patio, "Nome do Pátio");
+                    req(d.enderecoPatio, "Endereço do Pátio");
+                    req(d.telefonePatio, "Telefone do Pátio");
+                }
+
+                if (d.tipoDestino === "OUTRA DELEGACIA DE POLÍCIA") {
+                    req(
+                        d.delegaciaDestino,
+                        "Nome da Delegacia de destino"
+                    );
+
+                    req(
+                        d.enderecoDestino,
+                        "Endereço da Delegacia de destino"
+                    );
+
+                    req(
+                        d.telefoneDestino,
+                        "Telefone da Delegacia de destino"
+                    );
+
+                    req(
+                        d.boDestino,
+                        "Número do B.O. de Apreensão da Delegacia de destino"
+                    );
+                }
+            }
+        }
+
+        if (d.tipo === "FECHAMENTO_BASE_LOCALIZA") {
+            req(d.tipoBase, "Tipo de estabelecimento");
+            req(d.enderecoBase, "Endereço da base do guincho/oficina");
+            req(d.relatoBase, "Relato / conclusões");
+            req(d.dadosSSBase, "Dados da SS");
+        }
+
+        if (d.tipo === "AVERIGUACAO_OK") {
+            req(d.condutorOk, "Nome do condutor/possuidor");
+            req(d.conclusaoOk, "Conclusão da liberação / relato");
+        }
+
+        if (d.tipo === "VEICULO_ATIVIDADE_CRIMINOSA") {
+            req(d.rastreadorCrime, "Utilizou rastreador?");
+            req(d.relatoCrime, "Relato da atividade criminosa");
+            req(d.delegaciaCrime, "Delegacia/unidade de apresentação e apreensão");
+            req(d.enderecoCrime, "Endereço da delegacia/unidade");
+            req(d.telefoneCrime, "Telefone da delegacia/unidade");
+            req(d.boCrime, "B.O. de apreensão");
+            req(d.crimePatio, "Foi encaminhado também para pátio?");
+            if (d.crimePatio === "SIM") {
+                req(d.patioCrime, "Nome do pátio");
+                req(d.enderecoPatioCrime, "Endereço do pátio");
+                req(d.telefonePatioCrime, "Telefone do pátio");
+            }
+        }
+
+        if (d.tipo === "GUINCHO_LM") {
+            req(d.matriz, "Matriz");
+
+            if (d.matriz === "OUTRO") {
+                req(d.outroMatriz, "Digite a Matriz");
+            }
+
+            if (d.matriz === "LM") {
+                req(d.produto, "Produto");
+            }
+        }
+
+        if (d.tipo === "INICIO_RECUPERACAO_HDI") {
+            req(d.dataHDI, "Data");
+            req(d.horarioHDI, "Horário");
+            req(d.tipoOcorrenciaHDI, "Tipo de ocorrência");
+            req(d.apoliceHDI, "Apólice");
+        }
+
+        if (d.tipo === "AGENCIA") {
+            req(d.operacao, "Operação");
+            req(d.rastreador, "Rastreador");
+            req(d.agencia, "Agência");
+            req(d.endereco, "Endereço da Agência");
+            req(d.telefone, "Telefone da Agência");
+            req(d.colaborador, "Colaborador");
+            req(d.matricula, "Matrícula");
+        }
+
+        return e;
+    }
+
+    function gerarPadrao(d) {
+        if (d.tipo === "SS") {
+            return `Equipe ODEEN atuou na LOCALIZAÇÃO e RECUPERAÇÃO do veiculo da placa ${d.placa}, em um caso de ${d.operacao}, encontrado nas imediações de ${d.local}.\n\nPosteriormente, o veículo foi encaminhado com segurança para uma base segura e seguirá para o endereço vinculado ao número da SS:\n\n${d.mensagemSS}\n\nDesta forma finalizamos o caso com o presente status.`;
+        }
+
+        if (d.tipo === "RV") {
+            const matriz =
+                d.matriz === "OUTRO"
+                    ? d.outroMatriz
+                    : d.matriz;
+
+            let identificacao = d.identificacao;
+
+            if (d.identificacao === "Chassi") {
+                identificacao = `através do chassi ${d.chassi}`;
+            } else if (d.identificacao === "Motor") {
+                identificacao = `através do número do motor ${d.motor}`;
+            } else if (d.identificacao === "Chassi e motor") {
+                identificacao = `através do chassi ${d.chassi} e motor ${d.motor}`;
+            } else if (d.identificacao === "Meios metalográficos") {
+                identificacao = "através de meios metalográficos";
+            } else if (d.identificacao === "Scanner") {
+                identificacao = "através de scanner";
+            } else if (d.identificacao === "Meios periciais") {
+                identificacao = "através de meios periciais";
+            } else if (d.identificacao === "Outro") {
+                identificacao = `através de ${d.outroIdentificacao}`;
+            }
+
+            if (d.destinoPosterior === "NAO") {
+                const documento = `B.O Nº ${d.bo}`;
+
+                return `A equipe ODEEN obteve êxito na RECUPERAÇÃO do veículo de placa ${d.placa} nas imediações de ${d.local}. O bem móvel estava listado na ${matriz}.\n\nO veículo foi encontrado ostentando placa ${d.placaOstentada}. A confirmação da identidade do veículo foi realizada ${identificacao}.\n\nApós localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o veículo para ${d.delegaciaApresentacao}, onde foi apresentado e o veículo segue apreendido até o presente momento, sob o ${documento}.\n\nDelegacia de Apreensão:\n\n${d.delegaciaApresentacao}\nEndereço: ${d.endereco}\nTelefone: ${d.telefone}\n\nB.O: ${d.bo}.\n\nDesta forma encerramos o caso com o presente status.`;
+            }
+
+            let t = `A equipe ODEEN obteve êxito na RECUPERAÇÃO do veículo de placa ${d.placa} nas imediações de ${d.local}. O bem móvel estava listado na ${matriz}.\n\nO veículo foi encontrado ostentando placa ${d.placaOstentada}. A confirmação da identidade do veículo foi realizada ${identificacao}.\n\nApós localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o veículo para ${d.delegaciaApresentacao}, onde foi apresentado.\n\nDelegacia de Apresentação:\n\n${d.delegaciaApresentacao}\nEndereço: ${d.endereco}\nTelefone: ${d.telefone}\n\nB.O: ${d.bo}.`;
+
+            if (d.tipoDestino === "PÁTIO DE APREENSÃO") {
+                t += `\n\nPosteriormente, o veículo foi encaminhado para o pátio de apreensão.\n\nPátio de Apreensão:\n\n${d.patio}\nEndereço: ${d.enderecoPatio}\nTelefone: ${d.telefonePatio}`;
+            } else {
+                t += `\n\nPosteriormente, o veículo foi encaminhado para a ${d.delegaciaDestino}, onde permaneceu apreendido.\n\nDelegacia de Apreensão:\n\n${d.delegaciaDestino}\nEndereço: ${d.enderecoDestino}\nTelefone: ${d.telefoneDestino}\n\nB.O: ${d.boDestino}.`;
+            }
+
+            return t + "\n\nDesta forma encerramos o caso com o presente status.";
+        }
+
+        if (d.tipo === "FECHAMENTO_BASE_LOCALIZA") {
+            const descricaoEstabelecimento = d.tipoBase === "OFICINA"
+                ? "em uma oficina credenciada pela Localiza, situada no endereço"
+                : "em um guincho credenciado pela Localiza, situado no endereço";
+            return `Equipe ODEEN atuou na LOCALIZAÇÃO do veículo de placa ${d.placa}, com o auxílio de rastreamento, nas imediações de ${d.local}.\n\nDurante as diligências, o ativo foi localizado ${descricaoEstabelecimento}: ${d.enderecoBase}.\n\n${d.relatoBase}\n\nDados da SS:\n\n${d.dadosSSBase}\n\nDeste modo, finalizamos o caso com o presente status.`;
+        }
+
+        if (d.tipo === "AVERIGUACAO_OK") {
+            const identificacao = d.documentoOk ? `, possuidor(a) do CPF/CNH: ${d.documentoOk}` : "";
+            return `Equipe ODEEN direcionou uma equipe de PRONTA RESPOSTA para atuação imediata na região do veículo de placa ${d.placa}, cuja comunicação do equipamento de rastreamento apontava para as proximidades de ${d.local}.\n\nDurante as varreduras realizadas no perímetro indicado, a equipe de apoio localizou o veículo em segurança. Após a localização, foi sinalizado à Matriz que o ativo estava em segurança na posse do condutor: ${d.condutorOk}${identificacao}.\n\n${d.conclusaoOk}\n\nDessa forma, encerramos o caso no presente status.`;
+        }
+
+        if (d.tipo === "VEICULO_ATIVIDADE_CRIMINOSA") {
+            const rastreador = d.rastreadorCrime === "SIM" ? "com auxílio do rastreador" : "sem auxílio do rastreador";
+            let texto = `Equipe ODEEN prosseguiu com a LOCALIZAÇÃO e RECUPERAÇÃO do veículo de placa ${d.placa}, localizado ${rastreador} nas imediações: ${d.local}.\n\n${d.relatoCrime}\n\nAssim, foram realizados os trâmites legais, encaminhando o veículo para ${d.delegaciaCrime}, onde foi apresentado e o ativo segue apreendido até o presente momento, sob o B.O. de Apreensão nº ${d.boCrime}.\n\nDelegacia/Unidade de Apreensão:\n${d.delegaciaCrime}\nEndereço: ${d.enderecoCrime}\nTelefone: ${d.telefoneCrime}\nB.O.: ${d.boCrime}.`;
+            if (d.crimePatio === "SIM") {
+                texto += `\n\nPosteriormente, o veículo foi encaminhado para o pátio de apreensão:\n${d.patioCrime}\nEndereço: ${d.enderecoPatioCrime}\nTelefone: ${d.telefonePatioCrime}.`;
+            }
+            return texto + "\n\nDesta forma encerramos o caso com o presente status.";
+        }
+
+        if (d.tipo === "GUINCHO_LM") {
+            const matriz =
+                d.matriz === "OUTRO"
+                    ? d.outroMatriz
+                    : d.matriz;
+
+            let t = `Equipe ODEEN atuou na LOCALIZAÇÃO e RECUPERAÇÃO do veículo de placa ${d.placa}, encontrado nas imediações ${d.local}.\n\nDurante as tratativas no local e considerando a necessidade de preservação do bem, foi acionado o guincho credenciado da ${matriz}, para realizar a remoção do veículo. O ativo foi devidamente carregado e encaminhado até a base credenciada, onde permanecerá sob responsabilidade da locadora para os devidos procedimentos internos.`;
+
+            if (d.matriz === "LM") {
+                t += `\n\nProduto: ${d.produto}\n\nNúmero da Assistência: ${d.assistencia || "não informado"}.`;
+            }
+
+            return t + "\n\nDesta forma, finalizamos o caso com o presente status.";
+        }
+
+        if (d.tipo === "INICIO_RECUPERACAO_HDI") {
+            const dataFormatada = d.dataHDI
+                ? d.dataHDI.split("-").reverse().join("/")
+                : "";
+            const sinistro = d.sinistroHDI ? `\n\nSinistro: ${d.sinistroHDI}` : "";
+
+            return `Equipe ODEEN, no dia ${dataFormatada} às ${d.horarioHDI}, prosseguiu com a LOCALIZAÇÃO do veículo de placa ${d.placa}, possuindo registro de ${d.tipoOcorrenciaHDI} e sem auxílio do rastreador, localizado nas imediações da ${d.localHDI}.\n\nInformamos que a RECUPERAÇÃO segue em andamento, com as devidas tratativas junto às autoridades competentes.\n\nApólice: ${d.apoliceHDI}${sinistro}`;
+        }
+
+        if (d.tipo === "AGENCIA") {
+            return `Equipe ODEEN atuou na LOCALIZAÇÃO e RECUPERAÇÃO do veículo de placa ${d.placa}, na régua como ${d.operacao}, ${d.rastreador}, nas imediações de ${d.local}.\n\nDurante as tratativas iniciais, o veículo foi localizado ainda em posse do locatário, que foi devidamente orientado quanto à necessidade de devolução do bem.\n\nApós receber as orientações, o condutor dirigiu-se à agência da ${d.agencia} para realizar a devolução formal do ativo.\n\nConfirmada a entrega do veículo na agência, nossa equipe de apoio procedeu com a realização do checklist do veículo.\n\nRegistros Relacionados:\n${d.agencia}\n\nEndereço: ${d.endereco}\n\nTelefone: ${d.telefone}\n\nColaborador: ${d.colaborador}.\n\nMatrícula: ${d.matricula}.\n\nDesta forma, finalizamos o caso com o presente status.`;
+        }
+
+        if (d.tipo === "PRONTA_RESPOSTA_SEM_SUCESSO") {
+            return `Equipe ODEEN direcionou uma equipe de PRONTA RESPOSTA para atuação imediata na região do veículo de placa ${d.placa}, cuja última comunicação do equipamento de rastreamento apontava para as proximidades da ${d.local}.
+
+Durante as varreduras realizadas no perímetro indicado, a equipe de apoio não teve sucesso na localização no módulo de rastreamento nem do veículo onde pontuava. Com isso foi realizado varreduras no local e entornos, porém sem sucesso na localização do ativo.
+
+Dessa forma, encerramos o caso no presente status`;
+        }
+
+        if (d.tipo === "PRONTA_RESPOSTA_RASTREADOR") {
+            const textoBase = `Equipe ODEEN direcionou uma equipe de PRONTA RESPOSTA para atuação imediata na região do veículo de placa ${d.placa}, cuja última comunicação do equipamento de rastreamento apontava para as proximidades da ${d.local}.
+
+Durante as varreduras realizadas no perímetro indicado, a equipe de apoio localizou apenas o módulo de rastreamento do veículo, em área de desmanche. Verificou-se que o equipamento havia sido seccionado e removido do ativo. O único remanescente do veículo encontrado foi a carcaça, totalmente incendiada. Em razão dos fatos, a Central determinou o recolhimento do módulo de rastreamento, permanecendo o equipamento sob guarda do prestador até novas orientações da matriz.`;
+
+            return textoBase + (d.rastreadorIMEI ? `
+
+RT IMEI: ${d.rastreadorIMEI}` : "");
+        }
+
+        return "";
+    }
+
+    function previewPadrao(finalize) {
+        const d = padraoData();
+        const errors = validatePadrao(d);
+
+        if (finalize) {
+            padraoValidation.innerHTML =
+                errors.length
+                    ? `<strong>Preencha os campos obrigatórios:</strong><ul>${errors.map(x => `<li>${x}</li>`).join("")}</ul>`
+                    : "";
+
+            padraoValidation.classList.toggle(
+                "visible",
+                errors.length > 0
+            );
+
+            if (errors.length) {
+                padraoStatus.textContent = "Dados incompletos";
+                padraoStatus.className = "status-badge error";
+                return;
+            }
+        }
+
+        if (d.tipo === "PERDA") {
+            padraoPreview.value = "";
+            padraoStatus.textContent = "Modelo pendente";
+            padraoStatus.className = "status-badge";
+            return;
+        }
+
+        const text = gerarPadrao(d);
+
+        padraoPreview.value = text;
+
+        if (finalize) {
+            padraoStatus.textContent = "Pronto";
+            padraoStatus.className = "status-badge ready";
+        }
+    }
+
+    function registerEvents() {
+        themeToggle.addEventListener("click", () => {
+            const isDark = document.documentElement.dataset.theme !== "dark";
+            applyTheme(isDark);
+
+            try {
+                localStorage.setItem("odeen-theme", isDark ? "dark" : "light");
+            } catch (e) {
+                // O tema continua funcionando mesmo quando o armazenamento não está disponível.
+            }
+
+            if (window.parent !== window) {
+                window.parent.postMessage(
+                    {
+                        type: "odeen-formalizador:theme-change",
+                        theme: isDark ? "dark" : "light"
+                    },
+                    "*"
+                );
+            }
+        });
+
+        document.querySelectorAll("input, select, textarea").forEach(field => {
+            field.addEventListener("input", () => {
+                updateConditionalFields();
+                updatePreview();
+            });
+
+            field.addEventListener("change", () => {
+                updateConditionalFields();
+                updatePreview();
+            });
+        });
+
+        $("generateButton").addEventListener(
+            "click",
+            generateFinal
+        );
+
+        $("copyButton").addEventListener(
+            "click",
+            copyFormalizacao
+        );
+
+        $("clearButton").addEventListener(
+            "click",
+            clearForm
+        );
+
+        document.querySelectorAll(".tab-button").forEach(button => {
+            button.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".tab-button")
+                    .forEach(b => b.classList.remove("active"));
+
+                document
+                    .querySelectorAll(".tab-content")
+                    .forEach(t => t.classList.remove("active"));
+
+                button.classList.add("active");
+
+                $(button.dataset.tab).classList.add("active");
+            });
+        });
+
+        padraoTipo.addEventListener(
+            "change",
+            renderPadraoCampos
+        );
+
+        $("padraoGenerateButton").addEventListener(
+            "click",
+            () => previewPadrao(true)
+        );
+
+        $("padraoCopyButton").addEventListener(
+            "click",
+            async () => {
+                if (!padraoPreview.value) return;
+
+                try {
+                    await navigator.clipboard.writeText(
+                        padraoPreview.value
+                    );
+
+                    showToast("Formalização copiada.");
+                } catch (e) {
+                    padraoPreview.select();
+                    document.execCommand("copy");
+                    showToast("Formalização copiada.");
+                }
+            }
+        );
+
+        $("padraoClearButton").addEventListener(
+            "click",
+            () => {
+                padraoTipo.value = "";
+                padraoCampos.innerHTML = "";
+                padraoPreview.value = "";
+                padraoValidation.classList.remove("visible");
+                padraoStatus.textContent = "Aguardando dados";
+                padraoStatus.className = "status-badge";
+            }
+        );
+    }
+
+    initializeTheme();
+    registerEvents();
+    updateConditionalFields();
+
+    if (window.parent !== window) {
+        window.addEventListener("message", (event) => {
+            if (event.source !== window.parent || typeof event.data !== "object" || event.data === null) {
+                return;
+            }
+
+            if (
+                event.data.type === "odeen-formalizador:theme" &&
+                (event.data.theme === "light" || event.data.theme === "dark")
+            ) {
+                applyTheme(event.data.theme === "dark");
+            }
+        });
+
+        window.parent.postMessage(
+            { type: "odeen-formalizador:request-theme" },
+            "*"
+        );
+    }
+</script>
+
+</body>
+</html>
