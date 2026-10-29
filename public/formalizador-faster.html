@@ -8,37 +8,37 @@
 
     <script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=4sPY22BVgWaf6ubyuii76FPczO6aqqS3KOzwKNiAfXxqcWzsbUTgmE3maIbc-9m36_lFMTXPzxeXwF-4fPp_M4Nf25uKAHeNi33h8EXMv4sf_549WFpkH2hTdnzOlSqOFobyVi3XvmkXasa7Uc7ZGKSrVL2k2EC8chqXxD9Ij-kY4MzcekCxaO0pdEVJ8DE4J-QSlmn5WZcjBHxrHIpbwO8KUS2igsMdeUBGZtgcnmrQxa2rgIWEndkQGZ_WJh8-4lFvH-rPkrOMmKJ3ul6qU0wfptwwh3Kvp-_kSmY3TDEy8X5y5UxsWH43cJNMNRT1LSFqK7OMihyifE4-0-Ju34onQiDP61CY4xCXMHZPIRY" charset="UTF-8"></script><style>
         :root {
-            --primary: #111b1e;
-            --primary-light: #1c2b2d;
-            --accent: #3b7a57;
-            --accent-hover: #2d6546;
+            --primary: #111312;
+            --primary-light: #222925;
+            --accent: hsl(151 28% 49%);
+            --accent-hover: hsl(151 36% 39%);
             --success: #15803d;
             --danger: #dc2626;
             --warning: #b45309;
-            --background: #f4f6f8;
+            --background: #f5f5f5;
             --card: #ffffff;
-            --border: #d5dde2;
-            --text: #1a2228;
-            --muted: #5f6c73;
+            --border: #d9d9d9;
+            --text: #111312;
+            --muted: #666666;
             --input-bg: #ffffff;
             --shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
             --radius: 12px;
         }
 
         [data-theme="dark"] {
-            --primary: #0d1419;
-            --primary-light: #151f25;
-            --accent: #4e9f6d;
-            --accent-hover: #63b680;
+            --primary: #111312;
+            --primary-light: #222925;
+            --accent: hsl(151 35% 56%);
+            --accent-hover: hsl(151 38% 66%);
             --success: #4ade80;
             --danger: #f87171;
             --warning: #fbbf24;
-            --background: #0f1418;
-            --card: #151b22;
-            --border: #2b3840;
-            --text: #edf2f3;
-            --muted: #9aa9ad;
-            --input-bg: #11181d;
+            --background: #111312;
+            --card: #172033;
+            --border: #34403a;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --input-bg: #111827;
             --shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
         }
 
@@ -1283,8 +1283,8 @@
 
             <textarea
                 id="preview"
-                readonly
-                placeholder="A formalização será construída automaticamente conforme o preenchimento do formulário."
+                placeholder="A formalização será construída automaticamente conforme o preenchimento do formulário. Você também pode editar o texto manualmente."
+                aria-label="Formalização gerada, editável"
             ></textarea>
 
             <div class="actions">
@@ -1933,8 +1933,13 @@
         return errors;
     }
 
+    function artigoAtivo(tipoAtivo) {
+        return tipoAtivo === "motocicleta" ? "a motocicleta" : "o veículo";
+    }
+
     function gerarPrimeiroParagrafo(data) {
         const ativo = data.tipoAtivo;
+        const ativoComArtigo = artigoAtivo(ativo);
         const placa = data.placa;
         const local = data.localizacao;
 
@@ -1943,7 +1948,7 @@
                 ? `Com queixa e registro e de ${data.tipoOcorrencia} sob o BO ${data.numeroBo}.`
                 : `Com registro de ${data.tipoOcorrencia} sob o BO ${data.numeroBo}.`;
 
-            return `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa}. ${registro} O ativo foi localizado ${local}.`;
+            return `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO ${ativoComArtigo} de placa ${placa}. ${registro} O ativo foi localizado ${local}.`;
         }
 
         if (data.tipoOcorrencia === "SEM QUEIXA/REGISTRO") {
@@ -1951,17 +1956,17 @@
                 ? "localizado com auxílio do rastreador"
                 : "localizado e sem auxílio do rastreador";
 
-            return `Equipe ODEEN prosseguiu com a LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa}, ${rastreador} nas imediações: ${local}.`;
+            return `Equipe ODEEN prosseguiu com a LOCALIZAÇÃO e RECUPERAÇÃO ${ativoComArtigo} de placa ${placa}, ${rastreador} nas imediações: ${local}.`;
         }
 
         const rastreador = data.possuiRastreador === "SIM"
             ? " com auxílio do rastreador"
             : " e sem auxílio do rastreador";
 
-        let texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado nas imediações de: ${local}.`;
+        let texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO ${ativoComArtigo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado nas imediações de: ${local}.`;
 
         if (data.possuiRastreador === "SIM") {
-            texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO do ${ativo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado${rastreador} nas imediações de: ${local}.`;
+            texto = `Equipe ODEEN atuou com êxito na LOCALIZAÇÃO e RECUPERAÇÃO ${ativoComArtigo} de placa ${placa} com queixa de ${data.tipoOcorrencia}. O ativo foi localizado${rastreador} nas imediações de: ${local}.`;
         }
 
         return texto;
@@ -2103,7 +2108,7 @@
         );
 
         const paragrafo =
-            `Após a recuperação do ${data.tipoAtivo}, o ativo foi encaminhado para ${data.delegaciaLiberacao}, sendo utilizado o ${documento}, assim liberando o ativo ${recebedor}.`;
+            `Após a recuperação ${artigoAtivo(data.tipoAtivo)}, o ativo foi encaminhado para ${data.delegaciaLiberacao}, sendo utilizado o ${documento}, assim liberando o ativo ${recebedor}.`;
 
         const nomeDocumento = data.documentoFora === "BO Auto de Entrega"
             ? "BO AUTO DE ENTREGA"
@@ -2191,7 +2196,7 @@
         );
 
         const localTexto =
-            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomeDelegaciaApreensao}, onde foi apresentado e o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando ${artigoAtivo(data.tipoAtivo)} para ${data.nomeDelegaciaApreensao}, onde foi apresentado e o ativo segue apreendido até o presente momento, sob o ${documento}.`;
 
         const bloco =
             `Delegacia de Apreensão:\n\n` +
@@ -2211,7 +2216,7 @@
         );
 
         const localTexto =
-            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomePatio}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando ${artigoAtivo(data.tipoAtivo)} para ${data.nomePatio}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
 
         const bloco =
             `Pátio de Apreensão:\n\n` +
@@ -2231,7 +2236,7 @@
         );
 
         const localTexto =
-            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando o ${data.tipoAtivo} para ${data.nomeDelegaciaApresentacao}, onde foi apresentado e posteriormente o ativo foi direcionado para ${data.nomeLocalDefinitivo}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
+            `Após localização do ativo em via pública, solicitamos a presença das forças de segurança pública, onde foram realizados os trâmites legais, encaminhando ${artigoAtivo(data.tipoAtivo)} para ${data.nomeDelegaciaApresentacao}, onde foi apresentado e posteriormente o ativo foi direcionado para ${data.nomeLocalDefinitivo}, local onde o ativo segue apreendido até o presente momento, sob o ${documento}.`;
 
         const blocoApresentacao =
             `Delegacia de apresentação:\n\n` +
@@ -2262,7 +2267,7 @@
         );
 
         return (
-            `Após localização do ativo em via pública, foram realizados os trâmites legais referentes à ocorrência, permanecendo o ${data.tipoAtivo} sem encaminhamento para delegacia ou pátio, sob o ${documento}.\n\n` +
+            `Após localização do ativo em via pública, foram realizados os trâmites legais referentes à ocorrência, permanecendo ${artigoAtivo(data.tipoAtivo)} sem encaminhamento para delegacia ou pátio, sob o ${documento}.\n\n` +
             `B.O: ${data.numeroBoApreensao || data.numeroDocumentoNaoEncaminhado}.\n\n` +
             `Desta forma encerramos o caso com o presente status.`
         );
@@ -3207,6 +3212,9 @@ RT IMEI: ${d.rastreadorIMEI}` : "");
         });
 
         document.querySelectorAll("input, select, textarea").forEach(field => {
+            // Os campos de texto gerado são editáveis e não devem disparar nova geração ao serem alterados.
+            if (field.id === "preview" || field.id === "padraoPreview") return;
+
             field.addEventListener("input", () => {
                 updateConditionalFields();
                 updatePreview();
